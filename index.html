@@ -69,34 +69,47 @@
   }
 
   /* ════════════════════════════════════════════════
-     CUSTOM CURSOR
+     CUSTOM CURSOR — Advanced
   ════════════════════════════════════════════════ */
   #cur-dot {
-    position:fixed; z-index:9998; pointer-events:none;
-    width:8px; height:8px; border-radius:50%;
+    position:fixed; z-index:490; pointer-events:none;
+    width:6px; height:6px; border-radius:50%;
     background:var(--navy);
+    top:0; left:0;
     transform:translate(-50%,-50%);
-    transition:transform 0.1s, width 0.3s var(--ease), height 0.3s var(--ease), background 0.3s, opacity 0.3s;
+    will-change:left,top;
+    transition:width 0.25s var(--ease), height 0.25s var(--ease),
+               background 0.25s, opacity 0.3s, border-radius 0.25s;
+    opacity:0;
   }
   #cur-ring {
-    position:fixed; z-index:9997; pointer-events:none;
-    width:36px; height:36px; border-radius:50%;
-    border:1.5px solid rgba(27,42,94,0.35);
+    position:fixed; z-index:489; pointer-events:none;
+    width:34px; height:34px; border-radius:50%;
+    border:1px solid rgba(27,42,94,0.22);
+    top:0; left:0;
     transform:translate(-50%,-50%);
-    transition:width 0.45s var(--ease), height 0.45s var(--ease), border-color 0.3s, opacity 0.3s, transform 0.45s var(--ease);
+    will-change:left,top;
+    transition:width 0.45s var(--ease), height 0.45s var(--ease),
+               border-color 0.3s, border-width 0.3s,
+               background 0.35s, opacity 0.3s, border-radius 0.35s;
+    opacity:0;
+    mix-blend-mode:multiply;
   }
-  #cur-label {
-    position:fixed; z-index:9998; pointer-events:none;
-    font-family:var(--mono); font-size:0.58rem; letter-spacing:0.1em;
-    color:var(--navy); opacity:0;
-    transform:translate(-50%, 28px);
-    transition:opacity 0.3s; white-space:nowrap;
-  }
-  /* States */
-  body.hover-link #cur-dot  { width:6px; height:6px; background:var(--rust); }
-  body.hover-link #cur-ring { width:52px; height:52px; border-color:rgba(192,78,48,0.45); }
-  body.hover-btn  #cur-dot  { width:0; height:0; opacity:0; }
-  body.hover-btn  #cur-ring { width:64px; height:64px; border-color:var(--navy); background:var(--navy-pale); }
+  body.cursor-active #cur-dot { opacity:1; }
+  body.cursor-active #cur-ring { opacity:1; }
+
+  /* LINK hover */
+  body.h-link #cur-dot  { width:4px; height:4px; background:var(--rust); }
+  body.h-link #cur-ring { width:42px; height:42px; border-color:rgba(192,78,48,0.28); }
+  /* BUTTON hover — dot hides, ring fills softly */
+  body.h-btn #cur-dot   { opacity:0 !important; }
+  body.h-btn #cur-ring  { width:52px; height:52px; background:rgba(27,42,94,0.055); border-color:rgba(27,42,94,0.35); border-width:1px; }
+  /* TEXT areas — thin bar caret */
+  body.h-text #cur-dot  { width:2px; height:16px; border-radius:1px; background:var(--navy); }
+  body.h-text #cur-ring { opacity:0 !important; }
+  /* CARD tilt */
+  body.h-card #cur-dot  { width:9px; height:9px; background:var(--navy-mid); }
+  body.h-card #cur-ring { width:48px; height:48px; border-color:rgba(27,42,94,0.25); border-width:1px; }
 
   /* ════════════════════════════════════════════════
      LAYOUT
@@ -678,7 +691,7 @@
     }
     .nav-list.open li a { display:block; padding:1rem 0; border-bottom:1px solid var(--border); }
     body { cursor:auto; }
-    #cur-dot,#cur-ring,#cur-label { display:none; }
+    #cur-dot,#cur-ring { display:none; }
     .about-grid,.contact-grid { grid-template-columns:1fr; gap:3rem; }
     .skills-body { grid-template-columns:1fr; }
     .skills-top { grid-template-columns:1fr; gap:2rem; margin-bottom:3rem; }
@@ -704,18 +717,17 @@
 <!-- CUSTOM CURSOR -->
 <div id="cur-dot"></div>
 <div id="cur-ring"></div>
-<div id="cur-label"></div>
 
 <!-- NAV -->
 <nav id="navbar">
-  <a class="nav-logo" onclick="goTo('hero')">Guna<em>chanthiran</em></a>
+  <a class="nav-logo" href="#hero">Guna<em>chanthiran</em></a>
   <ul class="nav-list" id="navlist">
-    <li><a onclick="goTo('about')">About</a></li>
-    <li><a onclick="goTo('skills')">Skills</a></li>
-    <li><a onclick="goTo('experience')">Experience</a></li>
-    <li><a onclick="goTo('projects')">Projects</a></li>
-    <li><a onclick="goTo('learning')">Learning</a></li>
-    <li><a onclick="goTo('contact')">Contact</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#learning">Learning</a></li>
+    <li><a href="#contact">Contact</a></li>
   </ul>
   <a class="nav-hire" id="nav-hire-btn">Hire Me</a>
   <button class="hamburger" id="hamburger">&#9776;</button>
@@ -746,8 +758,8 @@
         <strong>web, mobile, desktop and API</strong> surfaces with precision and care.
       </p>
       <div class="hero-btns">
-        <a class="btn-navy btn-magnetic" onclick="goTo('projects')"><span>View My Work</span></a>
-        <a class="btn-outline btn-magnetic" onclick="goTo('contact')"><span>Get in Touch</span></a>
+        <a class="btn-navy btn-magnetic" href="#projects"><span>View My Work</span></a>
+        <a class="btn-outline btn-magnetic" href="#contact"><span>Get in Touch</span></a>
         <a class="btn-outline btn-magnetic" href="https://github.com/Gunachanthiran" target="_blank" rel="noopener"><span>GitHub &#8599;</span></a>
       </div>
       <div class="hero-stats">
@@ -1124,15 +1136,25 @@ document.getElementById('footer-links').innerHTML =
 document.getElementById('yr').textContent = new Date().getFullYear();
 
 /* ══════════════════════════════════════════════
-   SMOOTH SCROLL
+   SMOOTH SCROLL — intercept all internal # links
+   Works on GitHub Pages, no inline onclick needed
 ══════════════════════════════════════════════ */
 function goTo(id) {
   var el = document.getElementById(id);
   if (!el) return;
-  var top = el.getBoundingClientRect().top + window.pageYOffset - 78;
+  var offset = 78;
+  var top = el.getBoundingClientRect().top + window.pageYOffset - offset;
   window.scrollTo({ top: top, behavior: 'smooth' });
   document.getElementById('navlist').classList.remove('open');
 }
+
+document.addEventListener('click', function(e) {
+  var a = e.target.closest('a[href^="#"]');
+  if (!a) return;
+  e.preventDefault();
+  var id = a.getAttribute('href').replace('#', '');
+  goTo(id);
+});
 
 /* ══════════════════════════════════════════════
    NAV SCROLL STATE + ACTIVE LINK + PROGRESS BAR
@@ -1155,8 +1177,8 @@ window.addEventListener('scroll', function() {
     if (el && el.getBoundingClientRect().top - 120 <= 0) current = id;
   });
   navLinks.forEach(function(a) {
-    var matches = a.getAttribute('onclick') && a.getAttribute('onclick').includes("'" + current + "'");
-    a.classList.toggle('active', matches);
+    var href = a.getAttribute('href') || '';
+    a.classList.toggle('active', href === '#' + current);
   });
 }, { passive: true });
 
@@ -1168,39 +1190,49 @@ document.getElementById('hamburger').addEventListener('click', function() {
 });
 
 /* ══════════════════════════════════════════════
-   CUSTOM CURSOR
+   CUSTOM CURSOR — Advanced
 ══════════════════════════════════════════════ */
-var dot   = document.getElementById('cur-dot');
-var ring  = document.getElementById('cur-ring');
-var lbl   = document.getElementById('cur-label');
-var mx = 0, my = 0, rx = 0, ry = 0;
+var dot  = document.getElementById('cur-dot');
+var ring = document.getElementById('cur-ring');
+var mx = -200, my = -200; // start offscreen
+var rx = -200, ry = -200;
+var ringSpeed = 0.13;
 
+/* Instant dot, lazy ring */
 document.addEventListener('mousemove', function(e) {
   mx = e.clientX; my = e.clientY;
-  dot.style.left  = mx + 'px';
-  dot.style.top   = my + 'px';
+  dot.style.left = mx + 'px';
+  dot.style.top  = my + 'px';
+  document.body.classList.add('cursor-active');
+});
+document.addEventListener('mouseleave', function() {
+  document.body.classList.remove('cursor-active');
 });
 
-/* Lazy ring follows dot */
 (function animRing() {
-  rx += (mx - rx) * 0.14;
-  ry += (my - ry) * 0.14;
-  ring.style.left  = rx + 'px';
-  ring.style.top   = ry + 'px';
-  lbl.style.left   = rx + 'px';
-  lbl.style.top    = ry + 'px';
+  rx += (mx - rx) * ringSpeed;
+  ry += (my - ry) * ringSpeed;
+  ring.style.left = rx + 'px';
+  ring.style.top  = ry + 'px';
   requestAnimationFrame(animRing);
 })();
 
-/* Cursor states */
-document.querySelectorAll('a, button, [onclick], .pill, .chip, .role-tag, .pref-item').forEach(function(el) {
-  el.addEventListener('mouseenter', function() { document.body.classList.add('hover-link'); });
-  el.addEventListener('mouseleave', function() { document.body.classList.remove('hover-link'); });
-});
-document.querySelectorAll('.btn-navy, .btn-outline, .nav-hire, .proj-btn').forEach(function(el) {
-  el.addEventListener('mouseenter', function() { document.body.classList.add('hover-btn'); document.body.classList.remove('hover-link'); });
-  el.addEventListener('mouseleave', function() { document.body.classList.remove('hover-btn'); });
-});
+/* Assign cursor states cleanly */
+function setCursor(els, state) {
+  els.forEach(function(el) {
+    el.addEventListener('mouseenter', function() {
+      document.body.classList.remove('h-link','h-btn','h-text','h-card');
+      if (state) document.body.classList.add(state);
+    });
+    el.addEventListener('mouseleave', function() {
+      document.body.classList.remove('h-link','h-btn','h-text','h-card');
+    });
+  });
+}
+setCursor(document.querySelectorAll('.btn-navy,.btn-outline,.nav-hire,.proj-btn'), 'h-btn');
+setCursor(document.querySelectorAll('a:not(.btn-navy):not(.btn-outline):not(.nav-hire):not(.proj-btn),.pill,.chip,.role-tag,.nav-list li a'), 'h-link');
+setCursor(document.querySelectorAll('.about-body p,.exp-summary,.proj-desc,.hero-desc,.contact-body'), 'h-text');
+setCursor(document.querySelectorAll('[data-tilt]'), 'h-card');
 
 /* ══════════════════════════════════════════════
    HERO MOUSE SPOTLIGHT
