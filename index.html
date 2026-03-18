@@ -13,16 +13,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
 <style>
 :root{
-  --paper:#F6F4EF;--paper2:#FFFFFF;--paper3:#EFECE5;
-  --ink:#0F0F14;--ink2:#252530;--ink3:#56566A;--ink4:#9494A6;--ink5:#C4C4CE;
-  --navy:#19285A;--navym:#2A3E8F;--navyp:rgba(25,40,90,0.06);--navyglow:rgba(25,40,90,0.14);
-  --rust:#BE4C2C;--rustp:rgba(190,76,44,0.08);
-  --green:#287A44;
-  --bd:rgba(15,15,20,0.08);--bdh:rgba(15,15,20,0.16);
-  --sh1:0 2px 8px rgba(0,0,0,0.06);
-  --sh2:0 8px 32px rgba(0,0,0,0.09),0 2px 8px rgba(0,0,0,0.05);
-  --sh3:0 20px 60px rgba(0,0,0,0.12),0 4px 16px rgba(0,0,0,0.06);
-  --shn:0 10px 40px rgba(25,40,90,0.22);
+  --paper:#F5F3EE;--paper2:#FFFFFF;--paper3:#EDEBE4;
+  --ink:#0E0E13;--ink2:#242430;--ink3:#55556A;--ink4:#9292A5;--ink5:#C2C2CE;
+  --navy:#18275A;--navym:#2A3D8F;--navyp:rgba(24,39,90,0.055);--navyg:rgba(24,39,90,0.13);
+  --rust:#BC4B2A;--rustp:rgba(188,75,42,0.07);
+  --green:#277842;
+  --gold:#B8943A;
+  --bd:rgba(14,14,19,0.08);--bdh:rgba(14,14,19,0.15);
+  --sh1:0 2px 8px rgba(0,0,0,0.05);
+  --sh2:0 8px 32px rgba(0,0,0,0.08),0 2px 8px rgba(0,0,0,0.04);
+  --sh3:0 24px 64px rgba(0,0,0,0.11),0 4px 16px rgba(0,0,0,0.06);
+  --shn:0 12px 44px rgba(24,39,90,0.22);
   --serif:'Cormorant Garamond',Georgia,serif;
   --sans:'DM Sans',sans-serif;
   --mono:'JetBrains Mono',monospace;
@@ -31,154 +32,190 @@
   --back:cubic-bezier(0.34,1.56,0.64,1);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{font-size:16px;scroll-behavior:auto}/* scroll managed by React */
+html{font-size:16px}
 body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-weight:400;line-height:1.7;cursor:none;overflow-x:hidden}
-body.no-cursor{cursor:auto}
-::selection{background:rgba(25,40,90,0.13)}
+::selection{background:rgba(24,39,90,0.12)}
 ::-webkit-scrollbar{width:3px}
 ::-webkit-scrollbar-track{background:var(--paper)}
 ::-webkit-scrollbar-thumb{background:var(--ink5);border-radius:2px}
 
-/* ── CURSOR ── */
+/* GRAIN OVERLAY */
+.grain{position:fixed;inset:0;z-index:9000;pointer-events:none;opacity:.028;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-repeat:repeat;background-size:300px 300px}
+
+/* PROGRESS */
+.progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--navy),var(--rust));z-index:9999;pointer-events:none;transform-origin:left;transition:width .06s linear}
+
+/* CURSOR */
 .cur-dot{position:fixed;z-index:490;pointer-events:none;border-radius:50%;background:var(--navy);transform:translate(-50%,-50%);transition:width .22s var(--ease),height .22s var(--ease),background .22s,opacity .25s,border-radius .22s}
-.cur-ring{position:fixed;z-index:489;pointer-events:none;border-radius:50%;border:1px solid rgba(25,40,90,0.2);transform:translate(-50%,-50%);transition:width .42s var(--ease),height .42s var(--ease),border-color .3s,background .3s,opacity .3s;mix-blend-mode:multiply}
+.cur-ring{position:fixed;z-index:489;pointer-events:none;border-radius:50%;border:1px solid rgba(24,39,90,0.2);transform:translate(-50%,-50%);transition:width .4s var(--ease),height .4s var(--ease),border-color .28s,background .3s,opacity .25s;mix-blend-mode:multiply}
 .cur-dot.idle,.cur-ring.idle{opacity:0}
-.cur-dot.default{width:6px;height:6px;opacity:1}
-.cur-ring.default{width:32px;height:32px;opacity:1}
-.cur-dot.onlink{width:4px;height:4px;background:var(--rust);opacity:1}
-.cur-ring.onlink{width:44px;height:44px;border-color:rgba(190,76,44,0.3);opacity:1}
-.cur-dot.onbtn{width:0;height:0;opacity:0}
-.cur-ring.onbtn{width:56px;height:56px;background:rgba(25,40,90,0.06);border-color:rgba(25,40,90,0.4);opacity:1}
-.cur-dot.ontext{width:2px;height:18px;border-radius:1px;opacity:1}
-.cur-ring.ontext{width:0;height:0;opacity:0}
-.cur-dot.oncard{width:10px;height:10px;background:var(--navym);opacity:1}
-.cur-ring.oncard{width:50px;height:50px;border-color:rgba(25,40,90,0.22);opacity:1}
+.cur-dot.def{width:6px;height:6px;opacity:1}
+.cur-ring.def{width:32px;height:32px;opacity:1}
+.cur-dot.lnk{width:4px;height:4px;background:var(--rust);opacity:1}
+.cur-ring.lnk{width:44px;height:44px;border-color:rgba(188,75,42,.28);opacity:1}
+.cur-dot.btn{width:0;height:0;opacity:0}
+.cur-ring.btn{width:54px;height:54px;background:rgba(24,39,90,0.055);border-color:rgba(24,39,90,.38);opacity:1}
+.cur-dot.txt{width:2px;height:17px;border-radius:1px;opacity:1}
+.cur-ring.txt{opacity:0}
+.cur-dot.crd{width:9px;height:9px;background:var(--navym);opacity:1}
+.cur-ring.crd{width:48px;height:48px;border-color:rgba(24,39,90,.2);opacity:1}
 
-/* ── PROGRESS ── */
-.progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--navy),var(--rust));z-index:9999;transition:width .08s linear;pointer-events:none}
-
-/* ── LAYOUT ── */
+/* LAYOUT */
 .wrap{max-width:1180px;margin:0 auto;padding:0 5.5%}
 section{padding:112px 0}
-.divider{height:1px;background:var(--bd)}
+.hr{height:1px;background:var(--bd)}
 
-/* ── NAV ── */
-.nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:1.5rem 5.5%;transition:padding .45s var(--ease),background .4s,box-shadow .4s}
-.nav.scrolled{padding:.9rem 5.5%;background:rgba(246,244,239,0.94);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);box-shadow:0 1px 0 var(--bd),0 4px 20px rgba(0,0,0,0.04)}
-.nav-logo{font-family:var(--serif);font-size:1.15rem;font-weight:600;color:var(--ink);text-decoration:none;transition:color .2s;cursor:pointer;background:none;border:none;padding:0}
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:1.5rem 5.5%;transition:padding .45s var(--ease),background .38s,box-shadow .38s}
+.nav.sc{padding:.88rem 5.5%;background:rgba(245,243,238,0.93);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);box-shadow:0 1px 0 var(--bd),0 4px 20px rgba(0,0,0,0.04)}
+.nav-logo{font-family:var(--serif);font-size:1.15rem;font-weight:600;color:var(--ink);background:none;border:none;cursor:pointer;padding:0;transition:color .2s}
 .nav-logo:hover{color:var(--navy)}
 .nav-logo em{color:var(--navy);font-style:italic}
 .nav-links{list-style:none;display:flex;gap:2.2rem}
-.nav-link{font-size:.78rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);background:none;border:none;cursor:pointer;padding:5px 0;position:relative;transition:color .25s,letter-spacing .3s var(--ease)}
-.nav-link::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1.5px;background:var(--navy);transition:width .3s var(--ease)}
-.nav-link:hover,.nav-link.active{color:var(--navy);letter-spacing:.11em}
-.nav-link:hover::after,.nav-link.active::after{width:100%}
-.nav-hire{font-size:.74rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;background:var(--navy);color:#fff;padding:.55rem 1.4rem;border-radius:100px;border:none;cursor:pointer;text-decoration:none;transition:background .25s,box-shadow .25s,transform .2s var(--back);box-shadow:0 2px 14px rgba(25,40,90,0.18)}
-.nav-hire:hover{background:var(--rust);box-shadow:0 6px 24px rgba(190,76,44,0.28);transform:translateY(-1px)}
+.nlink{font-size:.77rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);background:none;border:none;cursor:pointer;padding:5px 0;position:relative;transition:color .22s,letter-spacing .3s var(--ease)}
+.nlink::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1.5px;background:var(--navy);transition:width .3s var(--ease)}
+.nlink:hover,.nlink.on{color:var(--navy);letter-spacing:.11em}
+.nlink:hover::after,.nlink.on::after{width:100%}
+.nhire{font-size:.73rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;background:var(--navy);color:#fff;padding:.54rem 1.4rem;border-radius:100px;border:none;cursor:pointer;text-decoration:none;transition:background .25s,box-shadow .25s,transform .2s var(--back);box-shadow:0 2px 14px rgba(24,39,90,0.18)}
+.nhire:hover{background:var(--rust);box-shadow:0 6px 24px rgba(188,75,42,.28);transform:translateY(-1px)}
 .hamburger{display:none;background:none;border:none;cursor:pointer;font-size:1.2rem;color:var(--ink);padding:4px}
 
-/* ── MOBILE NAV ── */
-.mobile-menu{position:fixed;top:0;left:0;right:0;bottom:0;z-index:450;background:rgba(246,244,239,0.98);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;transform:translateX(100%);transition:transform .5s var(--ease);pointer-events:none}
-.mobile-menu.open{transform:translateX(0);pointer-events:all}
-.mobile-link{font-family:var(--serif);font-size:2.8rem;font-weight:500;color:var(--ink);background:none;border:none;cursor:pointer;padding:.6rem 0;opacity:0;transform:translateX(30px);transition:color .25s,opacity .4s var(--ease),transform .4s var(--ease)}
-.mobile-menu.open .mobile-link{opacity:1;transform:translateX(0)}
-.mobile-link:nth-child(1){transition-delay:.05s}
-.mobile-link:nth-child(2){transition-delay:.1s}
-.mobile-link:nth-child(3){transition-delay:.15s}
-.mobile-link:nth-child(4){transition-delay:.2s}
-.mobile-link:nth-child(5){transition-delay:.25s}
-.mobile-link:nth-child(6){transition-delay:.3s}
-.mobile-link:hover{color:var(--navy)}
-.mobile-close{position:absolute;top:1.5rem;right:5.5%;background:none;border:none;cursor:pointer;font-size:1.5rem;color:var(--ink3)}
+/* MOBILE FULLSCREEN MENU */
+.mmenu{position:fixed;inset:0;z-index:450;background:rgba(245,243,238,.98);backdrop-filter:blur(24px);display:flex;flex-direction:column;align-items:center;justify-content:center;transform:translateX(100%);transition:transform .5s var(--ease);pointer-events:none}
+.mmenu.open{transform:translateX(0);pointer-events:all}
+.mlink{font-family:var(--serif);font-size:clamp(2rem,7vw,3rem);font-weight:500;color:var(--ink);background:none;border:none;cursor:pointer;padding:.55rem 0;opacity:0;transform:translateX(28px);transition:color .22s,opacity .4s var(--ease),transform .4s var(--ease)}
+.mmenu.open .mlink{opacity:1;transform:translateX(0)}
+.mmenu.open .mlink:nth-child(1){transition-delay:.04s}
+.mmenu.open .mlink:nth-child(2){transition-delay:.09s}
+.mmenu.open .mlink:nth-child(3){transition-delay:.14s}
+.mmenu.open .mlink:nth-child(4){transition-delay:.19s}
+.mmenu.open .mlink:nth-child(5){transition-delay:.24s}
+.mmenu.open .mlink:nth-child(6){transition-delay:.29s}
+.mlink:hover{color:var(--navy)}
+.mclose{position:absolute;top:1.4rem;right:5.5%;background:none;border:none;cursor:pointer;font-size:1.4rem;color:var(--ink3);transition:color .2s;padding:4px}
+.mclose:hover{color:var(--ink)}
 
-/* ── HERO ── */
-.hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;background:var(--paper)}
-.hero-spotlight{position:absolute;inset:0;pointer-events:none;z-index:0;transition:background .15s linear}
-.hero-dotgrid{position:absolute;top:0;right:0;width:50%;height:100%;pointer-events:none;z-index:0;background-image:radial-gradient(circle,rgba(25,40,90,0.09) 1px,transparent 1px);background-size:26px 26px;-webkit-mask-image:linear-gradient(to left,rgba(0,0,0,.45) 0%,transparent 72%);mask-image:linear-gradient(to left,rgba(0,0,0,.45) 0%,transparent 72%)}
-.hero-bgword{position:absolute;right:1%;bottom:-6%;font-family:var(--serif);font-size:clamp(12rem,21vw,20rem);font-weight:600;color:rgba(25,40,90,0.033);line-height:1;pointer-events:none;user-select:none;letter-spacing:-.03em;z-index:0}
-.hero-inner{padding-top:88px;position:relative;z-index:1;max-width:740px}
-.hero-badge{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--navym);margin-bottom:2.25rem}
-.badge-dot{width:7px;height:7px;border-radius:50%;background:#38C16E;box-shadow:0 0 0 3px rgba(56,193,110,.2);animation:pulse 2.5s ease-in-out infinite}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 3px rgba(56,193,110,.2)}50%{box-shadow:0 0 0 7px rgba(56,193,110,.07)}}
-.hero-name{font-family:var(--serif);font-size:clamp(3.6rem,8.5vw,7rem);font-weight:500;line-height:.94;letter-spacing:-.025em;color:var(--ink);margin-bottom:1.75rem}
-.hero-name .it{font-style:italic;color:var(--navy)}
-.hero-sub{display:flex;flex-wrap:wrap;margin-bottom:2.2rem}
-.hero-sub-item{font-size:.76rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);padding-right:1.2rem;margin-right:1.2rem;border-right:1px solid var(--bdh);line-height:1;transition:color .2s;cursor:default}
-.hero-sub-item:last-child{border-right:none}
-.hero-sub-item:hover{color:var(--navy)}
-.hero-desc{font-size:1.02rem;font-weight:300;color:var(--ink2);max-width:520px;line-height:1.85;margin-bottom:2.75rem}
-.hero-desc strong{font-weight:600;color:var(--ink)}
-.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:4.5rem}
-.hero-stats{display:flex;padding-top:3rem;border-top:1px solid var(--bd)}
-.stat{padding-right:3rem;margin-right:3rem;border-right:1px solid var(--bd);cursor:default}
-.stat:last-child{border-right:none}
-.stat-n{font-family:var(--serif);font-size:2.8rem;font-weight:500;color:var(--navy);line-height:1;display:inline-block;transition:color .25s,transform .25s var(--back)}
-.stat:hover .stat-n{color:var(--rust);transform:scale(1.07)}
-.stat-l{font-size:.68rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--ink4);margin-top:5px}
-
-/* ── BUTTONS ── */
-.btn-p{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:.88rem 2.1rem;background:var(--navy);color:#fff;font-family:var(--sans);font-size:.77rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;border:none;border-radius:var(--r);cursor:pointer;position:relative;overflow:hidden;transition:box-shadow .3s,transform .2s var(--back);box-shadow:0 2px 12px rgba(25,40,90,0.2);text-decoration:none}
+/* BUTTONS */
+.btn-p,.btn-g{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:.88rem 2.1rem;font-family:var(--sans);font-size:.77rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;border:none;border-radius:var(--r);cursor:pointer;position:relative;overflow:hidden;text-decoration:none}
+.btn-p{background:var(--navy);color:#fff;box-shadow:0 2px 12px rgba(24,39,90,.2);transition:box-shadow .3s,transform .2s var(--back)}
 .btn-p .fill{position:absolute;inset:0;background:var(--rust);transform:translateX(-105%);transition:transform .4s var(--ease);border-radius:var(--r)}
-.btn-p:hover .fill{transform:translateX(0)}
 .btn-p:hover{box-shadow:var(--shn);transform:translateY(-3px)}
+.btn-p:hover .fill{transform:translateX(0)}
 .btn-p span{position:relative;z-index:1}
-.btn-g{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:.88rem 2.1rem;border:1.5px solid var(--bdh);color:var(--ink2);font-family:var(--sans);font-size:.77rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;background:transparent;border-radius:var(--r);cursor:pointer;position:relative;overflow:hidden;transition:color .3s,border-color .3s,transform .2s var(--back),box-shadow .3s;text-decoration:none}
+.btn-g{background:transparent;color:var(--ink2);border:1.5px solid var(--bdh);font-weight:500;transition:color .3s,border-color .3s,transform .2s var(--back),box-shadow .3s}
 .btn-g .fill{position:absolute;inset:0;background:var(--navyp);transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
+.btn-g:hover{border-color:var(--navy);color:var(--navy);transform:translateY(-3px);box-shadow:0 6px 20px rgba(24,39,90,.1)}
 .btn-g:hover .fill{transform:scaleX(1)}
-.btn-g:hover{border-color:var(--navy);color:var(--navy);transform:translateY(-3px);box-shadow:0 6px 20px rgba(25,40,90,0.1)}
 .btn-g span{position:relative;z-index:1}
-/* Arrow slides on hover */
-.btn-arr{transition:transform .3s var(--ease)}
-.btn-p:hover .btn-arr,.btn-g:hover .btn-arr{transform:translate(3px,-3px)}
+.barr{transition:transform .3s var(--ease)}
+.btn-p:hover .barr,.btn-g:hover .barr{transform:translate(3px,-3px)}
 
-/* ── SECTION HEADER ── */
-.eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:.67rem;letter-spacing:.18em;text-transform:uppercase;color:var(--navym);margin-bottom:1rem}
+/* SECTION HEAD */
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--navym);margin-bottom:1rem}
 .eyebrow::before{content:'';width:26px;height:1.5px;background:var(--navym)}
-.sec-title{font-family:var(--serif);font-size:clamp(2.5rem,5vw,3.9rem);font-weight:500;line-height:1.06;letter-spacing:-.025em;color:var(--ink);margin-bottom:1.1rem;overflow:hidden}
-.sec-title .it{font-style:italic;color:var(--navy)}
-.tl{display:block;transition:transform .8s var(--ease),opacity .8s var(--ease)}
-.tl.hidden{transform:translateY(100%);opacity:0}
-.tl.visible{transform:translateY(0);opacity:1}
-.sec-lead{font-size:.96rem;font-weight:300;color:var(--ink3);max-width:520px;line-height:1.85}
-
-/* ── REVEAL ── */
-.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.sec-t{font-family:var(--serif);font-size:clamp(2.4rem,5vw,3.8rem);font-weight:500;line-height:1.06;letter-spacing:-.025em;color:var(--ink);margin-bottom:1.1rem;overflow:hidden}
+.sec-t .it{font-style:italic;color:var(--navy)}
+.tl{display:block;transition:transform .85s var(--ease),opacity .85s var(--ease)}
+.tl.h{transform:translateY(105%);opacity:0}
+.tl.v{transform:translateY(0);opacity:1}
+.sec-lead{font-size:.95rem;font-weight:300;color:var(--ink3);max-width:520px;line-height:1.85}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
 .reveal.in{opacity:1;transform:translateY(0)}
 .reveal.d1{transition-delay:.1s}
 .reveal.d2{transition-delay:.2s}
-.reveal.d3{transition-delay:.28s}
+
+/* ── HERO ── */
+#hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;background:var(--paper)}
+.hero-spotlight{position:absolute;inset:0;pointer-events:none;z-index:0}
+.dotgrid{position:absolute;top:0;right:0;width:50%;height:100%;pointer-events:none;z-index:0;background-image:radial-gradient(circle,rgba(24,39,90,.085) 1px,transparent 1px);background-size:26px 26px;-webkit-mask-image:linear-gradient(to left,rgba(0,0,0,.45) 0%,transparent 72%);mask-image:linear-gradient(to left,rgba(0,0,0,.45) 0%,transparent 72%)}
+/* Floating geometric accents */
+.geo{position:absolute;pointer-events:none;z-index:0}
+.geo-1{top:18%;right:8%;width:180px;height:180px;border:1px solid rgba(24,39,90,.07);border-radius:50%;animation:spin 28s linear infinite}
+.geo-2{top:22%;right:12%;width:100px;height:100px;border:1px solid rgba(188,75,42,.06);border-radius:50%;animation:spin 18s linear infinite reverse}
+.geo-3{top:58%;right:22%;width:48px;height:48px;border:1px solid rgba(24,39,90,.09);transform:rotate(45deg);animation:spinSq 22s linear infinite}
+.geo-4{bottom:18%;right:6%;width:6px;height:6px;background:rgba(188,75,42,.25);border-radius:50%;animation:float 5s ease-in-out infinite}
+.geo-5{top:35%;right:30%;width:4px;height:4px;background:rgba(24,39,90,.2);border-radius:50%;animation:float 7s ease-in-out infinite 1.5s}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes spinSq{to{transform:rotate(45deg + 360deg)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.hero-bgword{position:absolute;right:0;bottom:-5%;font-family:var(--serif);font-size:clamp(12rem,20vw,19rem);font-weight:600;color:rgba(24,39,90,.028);line-height:1;pointer-events:none;user-select:none;letter-spacing:-.03em;z-index:0}
+
+.hero-inner{padding-top:88px;position:relative;z-index:1;max-width:740px}
+.hero-badge{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--navym);margin-bottom:2.2rem;animation:riseUp .7s var(--ease) both}
+.bdot{width:7px;height:7px;border-radius:50%;background:#38C16E;box-shadow:0 0 0 3px rgba(56,193,110,.2);animation:glow 2.5s ease-in-out infinite}
+@keyframes glow{0%,100%{box-shadow:0 0 0 3px rgba(56,193,110,.2)}50%{box-shadow:0 0 0 7px rgba(56,193,110,.07)}}
+.hero-name{font-family:var(--serif);font-size:clamp(3.6rem,8.5vw,7rem);font-weight:500;line-height:.94;letter-spacing:-.025em;color:var(--ink);margin-bottom:1.75rem;animation:riseUp .7s .1s var(--ease) both}
+.hero-name .it{font-style:italic;color:var(--navy)}
+.hero-sub{display:flex;flex-wrap:wrap;margin-bottom:2.2rem;animation:riseUp .7s .2s var(--ease) both}
+.hsi{font-size:.75rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);padding-right:1.2rem;margin-right:1.2rem;border-right:1px solid var(--bdh);line-height:1;transition:color .2s;cursor:default}
+.hsi:last-child{border-right:none}
+.hsi:hover{color:var(--navy)}
+.hero-desc{font-size:1.01rem;font-weight:300;color:var(--ink2);max-width:520px;line-height:1.85;margin-bottom:2.75rem;animation:riseUp .7s .3s var(--ease) both}
+.hero-desc strong{font-weight:600;color:var(--ink)}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:4.5rem;animation:riseUp .7s .4s var(--ease) both}
+.hero-stats{display:flex;padding-top:3rem;border-top:1px solid var(--bd);animation:riseUp .7s .5s var(--ease) both}
+.stat{padding-right:3rem;margin-right:3rem;border-right:1px solid var(--bd);cursor:default}
+.stat:last-child{border-right:none}
+.stn{font-family:var(--serif);font-size:2.8rem;font-weight:500;color:var(--navy);line-height:1;display:inline-block;transition:color .25s,transform .25s var(--back)}
+.stat:hover .stn{color:var(--rust);transform:scale(1.07)}
+.stl{font-size:.67rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--ink4);margin-top:5px}
+@keyframes riseUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── MARQUEE STRIP ── */
+.marquee-strip{background:var(--navy);padding:.75rem 0;overflow:hidden;position:relative;z-index:1}
+.marquee-track{display:flex;gap:0;animation:marqueeScroll 30s linear infinite;width:max-content}
+.marquee-track:hover{animation-play-state:paused}
+.marquee-item{display:flex;align-items:center;gap:2rem;padding:0 2rem;white-space:nowrap;font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.55)}
+.marquee-item .dot{width:4px;height:4px;border-radius:50%;background:var(--rust);flex-shrink:0}
+.marquee-item.hi{color:rgba(255,255,255,.9)}
+@keyframes marqueeScroll{to{transform:translateX(-50%)}}
 
 /* ── ABOUT ── */
 #about{background:var(--paper2)}
 .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;margin-top:5rem}
-.about-body p{font-size:.97rem;font-weight:300;color:var(--ink2);line-height:1.9;margin-bottom:1.4rem}
+.about-body p{font-size:.96rem;font-weight:300;color:var(--ink2);line-height:1.9;margin-bottom:1.4rem}
 .about-body p strong{font-weight:600;color:var(--ink)}
 .about-body p .ac{color:var(--navy);font-weight:500}
 .bq{border-left:3px solid var(--navy);padding:.8rem 0 .8rem 1.5rem;margin:2.2rem 0;font-family:var(--serif);font-size:1.18rem;font-style:italic;color:var(--ink2);line-height:1.6;position:relative}
 .bq::before{content:'';position:absolute;left:-3px;top:0;bottom:100%;width:3px;background:var(--rust);transition:bottom .7s var(--ease)}
-.bq.animate::before{bottom:0}
-.info-cards{display:flex;flex-direction:column;gap:1.2rem}
-.icard{background:var(--paper);border:1px solid var(--bd);border-radius:var(--r);padding:1.6rem 1.75rem;transition:box-shadow .35s var(--ease),border-color .25s,transform .35s var(--ease)}
-.icard:hover{box-shadow:var(--sh2);border-color:var(--bdh);transform:translateY(-2px)}
-.icard-lbl{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--navym);margin-bottom:1rem}
-.irow{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;font-size:.85rem;padding:.48rem 0;border-bottom:1px solid var(--bd)}
-.irow:last-child{border-bottom:none;padding-bottom:0}
-.irow-k{color:var(--ink3)}
-.irow-v{color:var(--ink);font-weight:500;text-align:right}
-.irow-v.g{color:var(--green)}
+.bq.anim::before{bottom:0}
+/* CODE TERMINAL CARD */
+.terminal{background:#1A1B26;border-radius:10px;overflow:hidden;box-shadow:var(--sh3)}
+.term-bar{background:#2A2B38;padding:.65rem 1rem;display:flex;align-items:center;gap:.5rem}
+.term-dot{width:11px;height:11px;border-radius:50%}
+.term-dot.r{background:#FF5F57}
+.term-dot.y{background:#FEBC2E}
+.term-dot.g{background:#28C840}
+.term-title{font-family:var(--mono);font-size:.65rem;color:rgba(255,255,255,.35);margin-left:.5rem;letter-spacing:.08em}
+.term-body{padding:1.5rem 1.75rem;font-family:var(--mono);font-size:.78rem;line-height:1.9;color:#A8AABB}
+.t-comment{color:#565E7C}
+.t-key{color:#7DCFFF}
+.t-val{color:#9ECE6A}
+.t-str{color:#F7768E}
+.t-num{color:#FF9E64}
+.t-cyan{color:#2AC3DE}
+.t-prompt{color:#7AA2F7}
 
 /* ── SKILLS ── */
 #skills{background:var(--paper)}
 .skills-top{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:end;margin-bottom:5rem}
 .skills-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2.5rem 4rem}
-.sg-t{font-family:var(--mono);font-size:.63rem;letter-spacing:.16em;text-transform:uppercase;color:var(--rust);margin-bottom:1.25rem;display:flex;align-items:center;gap:.75rem}
-.sg-t::after{content:'';flex:1;height:1px;background:var(--bd)}
+.sgt{font-family:var(--mono);font-size:.63rem;letter-spacing:.16em;text-transform:uppercase;color:var(--rust);margin-bottom:1.25rem;display:flex;align-items:center;gap:.75rem}
+.sgt::after{content:'';flex:1;height:1px;background:var(--bd)}
 .pills{display:flex;flex-wrap:wrap;gap:7px}
-.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--bd);border-radius:100px;padding:5px 14px;font-size:.75rem;font-weight:500;color:var(--ink2);background:var(--paper2);letter-spacing:.02em;cursor:default;position:relative;overflow:hidden;transition:color .3s,border-color .3s,background .3s,transform .22s var(--back),box-shadow .3s;user-select:none}
-.pill:hover{color:var(--navy);border-color:rgba(25,40,90,.3);background:var(--navyp);transform:translateY(-2px) scale(1.03);box-shadow:0 4px 14px rgba(25,40,90,.1)}
-.pill-mark{width:5px;height:5px;border-radius:50%;flex-shrink:0;transition:transform .3s var(--back)}
-.pill:hover .pill-mark{transform:scale(1.6)}
+.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--bd);border-radius:100px;padding:5px 14px;font-size:.75rem;font-weight:500;color:var(--ink2);background:var(--paper2);letter-spacing:.02em;cursor:default;position:relative;overflow:hidden;transition:color .28s,border-color .28s,background .28s,transform .22s var(--back),box-shadow .28s;user-select:none}
+.pill:hover{color:var(--navy);border-color:rgba(24,39,90,.3);background:var(--navyp);transform:translateY(-2px) scale(1.03);box-shadow:0 4px 14px rgba(24,39,90,.1)}
+.pm{width:5px;height:5px;border-radius:50%;flex-shrink:0;transition:transform .3s var(--back)}
+.pill:hover .pm{transform:scale(1.6)}
 .mn{background:var(--navy)}.mr{background:var(--rust)}.mg{background:#38A062}.ms{background:#6474A0}
+
+/* SKILL ARC CARDS */
+.arc-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;margin-top:3.5rem}
+.arc-card{background:var(--paper2);border:1px solid var(--bd);border-radius:var(--r);padding:1.5rem 1rem;text-align:center;transition:box-shadow .3s var(--ease),transform .3s var(--back),border-color .25s}
+.arc-card:hover{box-shadow:var(--sh2);transform:translateY(-4px);border-color:var(--bdh)}
+.arc-svg{width:80px;height:80px;margin:0 auto .75rem}
+.arc-label{font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3)}
+.arc-name{font-size:.82rem;font-weight:600;color:var(--ink);margin-top:.25rem}
 
 /* ── EXPERIENCE ── */
 #experience{background:var(--paper2)}
@@ -187,18 +224,18 @@ section{padding:112px 0}
 .exp-row:first-child{border-top:1px solid var(--bd)}
 .exp-row::before{content:'';position:absolute;left:0;top:0;bottom:100%;width:2px;background:linear-gradient(to bottom,var(--navy),var(--rust));transition:bottom .55s var(--ease)}
 .exp-row:hover::before{bottom:0}
-.exp-co{font-family:var(--serif);font-size:1.3rem;font-weight:500;color:var(--ink);line-height:1.2;margin-bottom:.5rem}
+.exp-co{font-family:var(--serif);font-size:1.28rem;font-weight:500;color:var(--ink);line-height:1.2;margin-bottom:.5rem}
 .exp-date{font-family:var(--mono);font-size:.63rem;letter-spacing:.12em;color:var(--navym);margin-bottom:.35rem}
 .exp-kind{font-size:.74rem;color:var(--ink4)}
 .exp-role{font-size:1rem;font-weight:600;color:var(--ink);margin-bottom:.75rem}
-.exp-summary{font-size:.91rem;font-weight:300;color:var(--ink3);line-height:1.85;margin-bottom:1.75rem}
+.exp-sum{font-size:.91rem;font-weight:300;color:var(--ink3);line-height:1.85;margin-bottom:1.75rem}
 .exp-list{list-style:none;display:flex;flex-direction:column;gap:.6rem;margin-bottom:2rem}
-.exp-list li{display:flex;align-items:flex-start;gap:.85rem;font-size:.87rem;color:var(--ink2);line-height:1.75;padding:.32rem .5rem;border-radius:var(--r);transition:background .2s,padding-left .3s var(--ease)}
+.exp-list li{display:flex;align-items:flex-start;gap:.85rem;font-size:.87rem;color:var(--ink2);line-height:1.75;padding:.32rem .5rem;border-radius:var(--r);transition:background .2s,padding-left .28s var(--ease)}
 .exp-list li:hover{background:var(--navyp);padding-left:.85rem}
 .exp-list li::before{content:'';display:block;flex-shrink:0;width:5px;height:1.5px;background:var(--navym);margin-top:12px}
 .exp-list li strong{color:var(--ink);font-weight:600}
 .exp-chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{font-family:var(--mono);font-size:.63rem;letter-spacing:.06em;color:var(--navym);background:var(--navyp);border:1px solid rgba(25,40,90,.12);padding:3px 10px;border-radius:4px;cursor:default;transition:background .22s,color .22s,transform .2s var(--back)}
+.chip{font-family:var(--mono);font-size:.63rem;letter-spacing:.06em;color:var(--navym);background:var(--navyp);border:1px solid rgba(24,39,90,.12);padding:3px 10px;border-radius:4px;cursor:default;transition:background .22s,color .22s,transform .2s var(--back)}
 .chip:hover{background:var(--navy);color:#fff;transform:translateY(-2px)}
 
 /* ── PROJECTS ── */
@@ -206,124 +243,125 @@ section{padding:112px 0}
 .proj-list{margin-top:5rem}
 .proj-row{display:grid;grid-template-columns:200px 1fr 175px;gap:2.5rem;align-items:center;padding:2.5rem 0;border-bottom:1px solid var(--bd);position:relative;transition:padding-left .3s var(--ease)}
 .proj-row:first-child{border-top:1px solid var(--bd)}
-.proj-row::before{content:'';position:absolute;left:-5.5%;right:-5.5%;top:0;bottom:0;background:linear-gradient(135deg,var(--navyp),rgba(190,76,44,.025));opacity:0;border-radius:var(--r);transition:opacity .4s var(--ease);pointer-events:none}
+.proj-row::before{content:'';position:absolute;left:-5.5%;right:-5.5%;top:0;bottom:0;background:linear-gradient(135deg,var(--navyp),rgba(188,75,42,.022));opacity:0;border-radius:var(--r);transition:opacity .38s var(--ease);pointer-events:none}
 .proj-row:hover::before{opacity:1}
 .proj-row:hover{padding-left:.6rem}
-.proj-n{font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;color:var(--ink4);margin-bottom:.4rem;transition:color .25s}
-.proj-row:hover .proj-n{color:var(--navym)}
-.proj-name{font-family:var(--serif);font-size:1.28rem;font-weight:500;color:var(--ink);line-height:1.2;margin-bottom:.32rem;transition:color .25s}
-.proj-row:hover .proj-name{color:var(--navy)}
-.proj-dom{font-size:.71rem;color:var(--ink4);letter-spacing:.06em}
-.proj-desc{font-size:.875rem;font-weight:300;color:var(--ink3);line-height:1.85}
-.proj-desc strong{font-weight:600;color:var(--ink2)}
+.pnum{font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;color:var(--ink4);margin-bottom:.4rem;transition:color .25s}
+.proj-row:hover .pnum{color:var(--navym)}
+.pname{font-family:var(--serif);font-size:1.28rem;font-weight:500;color:var(--ink);line-height:1.2;margin-bottom:.32rem;transition:color .25s}
+.proj-row:hover .pname{color:var(--navy)}
+.pdom{font-size:.7rem;color:var(--ink4);letter-spacing:.06em}
+.pdesc{font-size:.875rem;font-weight:300;color:var(--ink3);line-height:1.85}
+.pdesc strong{font-weight:600;color:var(--ink2)}
 .proj-right{display:flex;flex-direction:column;gap:.75rem;align-items:flex-end}
-.proj-btn{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;color:var(--navy);border:1px solid rgba(25,40,90,.25);padding:7px 14px;border-radius:var(--r);background:var(--paper2);cursor:pointer;text-decoration:none;overflow:hidden;position:relative;transition:color .3s,border-color .3s,transform .2s var(--back),box-shadow .3s}
-.proj-btn .fill{position:absolute;inset:0;background:var(--navy);transform:translateY(105%);transition:transform .35s var(--ease)}
-.proj-btn:hover{color:#fff;border-color:var(--navy);transform:translateY(-2px);box-shadow:var(--shn)}
-.proj-btn:hover .fill{transform:translateY(0)}
-.proj-btn span,.proj-btn .arr{position:relative;z-index:1}
-.proj-btn .arr{transition:transform .3s var(--ease)}
-.proj-btn:hover .arr{transform:translate(3px,-3px)}
-.proj-tags{display:flex;flex-wrap:wrap;gap:5px;justify-content:flex-end}
+.pbtn{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;color:var(--navy);border:1px solid rgba(24,39,90,.25);padding:7px 14px;border-radius:var(--r);background:var(--paper2);cursor:pointer;text-decoration:none;overflow:hidden;position:relative;transition:color .28s,border-color .28s,transform .2s var(--back),box-shadow .28s}
+.pbtn .fill{position:absolute;inset:0;background:var(--navy);transform:translateY(105%);transition:transform .35s var(--ease)}
+.pbtn:hover{color:#fff;border-color:var(--navy);transform:translateY(-2px);box-shadow:var(--shn)}
+.pbtn:hover .fill{transform:translateY(0)}
+.pbtn span,.pbtn .arr{position:relative;z-index:1}
+.pbtn .arr{transition:transform .3s var(--ease)}
+.pbtn:hover .arr{transform:translate(3px,-3px)}
+.ptags{display:flex;flex-wrap:wrap;gap:5px;justify-content:flex-end}
 .pt{font-family:var(--mono);font-size:.58rem;letter-spacing:.05em;color:var(--ink4);padding:2px 8px;border-radius:3px;background:var(--paper3);border:1px solid var(--bd);transition:background .2s,color .2s,transform .18s var(--back)}
 .pt:hover{background:var(--navyp);color:var(--navym);transform:translateY(-1px)}
 
 /* ── LEARNING ── */
 #learning{background:var(--paper2)}
-.learn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:4.5rem}
+.lgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:4.5rem}
 .lcard{background:var(--paper);border:1px solid var(--bd);border-radius:var(--r);padding:2rem;position:relative;overflow:hidden;transition:box-shadow .35s var(--ease),border-color .25s}
 .lcard::before{content:'';position:absolute;top:0;left:0;right:100%;height:3px;background:linear-gradient(90deg,var(--navy),var(--navym));transition:right .5s var(--ease)}
 .lcard:hover{box-shadow:var(--sh2);border-color:var(--bdh)}
 .lcard:hover::before{right:0}
 .lcard-n{font-family:var(--mono);font-size:.58rem;letter-spacing:.15em;color:var(--ink4);margin-bottom:1.1rem}
-.lcard-t{font-family:var(--serif);font-size:1.13rem;font-weight:500;color:var(--ink);margin-bottom:.75rem;line-height:1.3;transition:color .25s}
+.lcard-t{font-family:var(--serif);font-size:1.12rem;font-weight:500;color:var(--ink);margin-bottom:.75rem;line-height:1.3;transition:color .25s}
 .lcard:hover .lcard-t{color:var(--navy)}
 .lcard-b{font-size:.82rem;font-weight:300;color:var(--ink3);line-height:1.8;margin-bottom:1.5rem}
-.prog-bar{height:3px;background:var(--bd);border-radius:2px;overflow:hidden}
-.prog-fill{height:100%;background:linear-gradient(90deg,var(--navy),var(--navym));border-radius:2px;width:0;transition:width 1.5s var(--ease)}
-.prog-lbl{display:flex;justify-content:space-between;margin-top:6px}
-.prog-lbl span{font-family:var(--mono);font-size:.58rem;letter-spacing:.08em;color:var(--ink4)}
+.pgbar{height:3px;background:var(--bd);border-radius:2px;overflow:hidden}
+.pgfill{height:100%;background:linear-gradient(90deg,var(--navy),var(--navym));border-radius:2px;width:0;transition:width 1.5s var(--ease)}
+.pglbl{display:flex;justify-content:space-between;margin-top:6px}
+.pglbl span{font-family:var(--mono);font-size:.58rem;letter-spacing:.08em;color:var(--ink4)}
 
 /* ── CERTS ── */
 #certs{background:var(--paper)}
-.certs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:4.5rem}
+.cgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:4.5rem}
 .cert{background:var(--paper2);border:1px solid var(--bd);border-radius:var(--r);padding:1.75rem;transition:box-shadow .35s var(--ease),transform .35s var(--back),border-color .25s}
 .cert:hover{box-shadow:var(--sh3);transform:translateY(-6px);border-color:var(--bdh)}
-.cert-badge{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:10px;background:var(--navyp);border:1px solid rgba(25,40,90,.12);margin-bottom:1.25rem;transition:background .3s,transform .3s var(--back)}
-.cert:hover .cert-badge{background:var(--navy);transform:rotate(-6deg) scale(1.1)}
-.cert-badge svg{width:20px;height:20px;stroke:var(--navy);fill:none;stroke-width:1.5;transition:stroke .3s}
-.cert:hover .cert-badge svg{stroke:#fff}
-.cert-name{font-size:.91rem;font-weight:600;color:var(--ink);margin-bottom:.3rem;transition:color .25s}
-.cert:hover .cert-name{color:var(--navy)}
-.cert-org{font-family:var(--mono);font-size:.63rem;letter-spacing:.08em;color:var(--navym);margin-bottom:.4rem}
-.cert-note{font-size:.77rem;color:var(--ink4)}
+.cbadge{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:10px;background:var(--navyp);border:1px solid rgba(24,39,90,.12);margin-bottom:1.25rem;transition:background .3s,transform .3s var(--back)}
+.cert:hover .cbadge{background:var(--navy);transform:rotate(-6deg) scale(1.1)}
+.cbadge svg{width:20px;height:20px;stroke:var(--navy);fill:none;stroke-width:1.5;transition:stroke .3s}
+.cert:hover .cbadge svg{stroke:#fff}
+.cname{font-size:.91rem;font-weight:600;color:var(--ink);margin-bottom:.3rem;transition:color .25s}
+.cert:hover .cname{color:var(--navy)}
+.corg{font-family:var(--mono);font-size:.63rem;letter-spacing:.08em;color:var(--navym);margin-bottom:.4rem}
+.cnote{font-size:.77rem;color:var(--ink4)}
 
 /* ── CONTACT ── */
 #contact{background:var(--paper2)}
-.contact-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:5.5rem;margin-top:5rem;align-items:start}
-.contact-hed{font-family:var(--serif);font-size:clamp(1.8rem,3.5vw,2.5rem);font-weight:500;line-height:1.25;color:var(--ink);margin-bottom:1.2rem}
-.contact-hed em{font-style:italic;color:var(--navy)}
-.contact-body{font-size:.91rem;font-weight:300;color:var(--ink3);line-height:1.85;margin-bottom:2.5rem;max-width:420px}
-.contact-body strong{color:var(--ink);font-weight:600}
-.c-item{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 0;border-bottom:1px solid var(--bd);text-decoration:none;color:var(--ink2);cursor:pointer;position:relative;overflow:hidden;transition:padding-left .3s var(--ease),color .25s}
-.c-item:first-child{border-top:1px solid var(--bd)}
-.c-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:0;background:var(--navyp);transition:width .35s var(--ease)}
-.c-item:hover::before{width:100%}
-.c-item:hover{padding-left:12px;color:var(--navy)}
-.c-item:hover .c-arr{opacity:1;transform:translate(4px,-4px)}
-.c-left{display:flex;align-items:center;gap:1.25rem;position:relative;z-index:1}
-.c-lbl{font-family:var(--mono);font-size:.61rem;letter-spacing:.14em;text-transform:uppercase;color:var(--navym);width:65px}
-.c-val{font-size:.86rem;font-weight:500}
-.c-arr{font-size:.75rem;color:var(--navym);opacity:.35;transition:all .3s var(--ease);position:relative;z-index:1}
-.contact-right{display:flex;flex-direction:column;gap:1.25rem}
-.status-card{background:var(--paper);border:1px solid var(--bd);border-radius:var(--r);padding:2rem;position:relative;overflow:hidden;transition:box-shadow .3s,transform .3s var(--back)}
-.status-card:hover{box-shadow:var(--sh2);transform:translateY(-2px)}
-.status-card::after{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,#38C16E,#287A44)}
-.status-top{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:1rem}
-.sdot{width:6px;height:6px;border-radius:50%;background:#38C16E;animation:pulse 2.5s ease-in-out infinite}
-.status-t{font-family:var(--serif);font-size:1.18rem;font-weight:500;color:var(--ink);margin-bottom:1.1rem}
-.role-tags{display:flex;flex-wrap:wrap;gap:7px}
-.role-tag{font-size:.74rem;font-weight:500;color:var(--ink2);background:var(--paper2);border:1px solid var(--bd);border-radius:var(--r);padding:5px 12px;cursor:default;transition:background .22s,color .22s,border-color .22s,transform .2s var(--back)}
-.role-tag:hover{background:var(--navy);color:#fff;border-color:var(--navy);transform:translateY(-2px)}
-.pref-card{background:var(--paper);border:1px solid var(--bd);border-radius:var(--r);padding:1.75rem;transition:box-shadow .3s,transform .3s var(--back)}
-.pref-card:hover{box-shadow:var(--sh2);transform:translateY(-2px)}
-.pref-t{font-family:var(--mono);font-size:.61rem;letter-spacing:.15em;text-transform:uppercase;color:var(--navym);margin-bottom:1rem}
-.pref-list{display:flex;flex-direction:column;gap:.5rem}
-.pref-item{display:flex;align-items:center;gap:10px;font-size:.83rem;color:var(--ink2);padding:.28rem .4rem;border-radius:6px;transition:background .2s,padding-left .25s var(--ease)}
-.pref-item:hover{background:var(--navyp);padding-left:.7rem}
-.pref-ck{color:var(--navym);font-size:.7rem;font-weight:600}
+.cgr{display:grid;grid-template-columns:1.1fr 1fr;gap:5.5rem;margin-top:5rem;align-items:start}
+.ched{font-family:var(--serif);font-size:clamp(1.8rem,3.5vw,2.5rem);font-weight:500;line-height:1.25;color:var(--ink);margin-bottom:1.2rem}
+.ched em{font-style:italic;color:var(--navy)}
+.cbody{font-size:.91rem;font-weight:300;color:var(--ink3);line-height:1.85;margin-bottom:2.5rem;max-width:420px}
+.cbody strong{color:var(--ink);font-weight:600}
+.citem{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 0;border-bottom:1px solid var(--bd);text-decoration:none;color:var(--ink2);cursor:pointer;position:relative;overflow:hidden;transition:padding-left .3s var(--ease),color .25s}
+.citem:first-child{border-top:1px solid var(--bd)}
+.citem::before{content:'';position:absolute;left:0;top:0;bottom:0;width:0;background:var(--navyp);transition:width .35s var(--ease)}
+.citem:hover::before{width:100%}
+.citem:hover{padding-left:12px;color:var(--navy)}
+.citem:hover .carr{opacity:1;transform:translate(4px,-4px)}
+.cleft{display:flex;align-items:center;gap:1.25rem;position:relative;z-index:1}
+.clbl{font-family:var(--mono);font-size:.61rem;letter-spacing:.14em;text-transform:uppercase;color:var(--navym);width:65px}
+.cval{font-size:.86rem;font-weight:500}
+.carr{font-size:.75rem;color:var(--navym);opacity:.35;transition:all .3s var(--ease);position:relative;z-index:1}
+.cright{display:flex;flex-direction:column;gap:1.25rem}
+.scard{background:var(--paper);border:1px solid var(--bd);border-radius:var(--r);padding:2rem;position:relative;overflow:hidden;transition:box-shadow .3s,transform .3s var(--back)}
+.scard:hover{box-shadow:var(--sh2);transform:translateY(-2px)}
+.scard::after{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,#38C16E,#277842)}
+.stop{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:1rem}
+.sdot{width:6px;height:6px;border-radius:50%;background:#38C16E;animation:glow 2.5s ease-in-out infinite}
+.st{font-family:var(--serif);font-size:1.18rem;font-weight:500;color:var(--ink);margin-bottom:1.1rem}
+.rtags{display:flex;flex-wrap:wrap;gap:7px}
+.rtag{font-size:.74rem;font-weight:500;color:var(--ink2);background:var(--paper2);border:1px solid var(--bd);border-radius:var(--r);padding:5px 12px;cursor:default;transition:background .22s,color .22s,border-color .22s,transform .2s var(--back)}
+.rtag:hover{background:var(--navy);color:#fff;border-color:var(--navy);transform:translateY(-2px)}
+.pcard{background:var(--paper);border:1px solid var(--bd);border-radius:var(--r);padding:1.75rem;transition:box-shadow .3s,transform .3s var(--back)}
+.pcard:hover{box-shadow:var(--sh2);transform:translateY(-2px)}
+.pt2{font-family:var(--mono);font-size:.61rem;letter-spacing:.15em;text-transform:uppercase;color:var(--navym);margin-bottom:1rem}
+.plist{display:flex;flex-direction:column;gap:.5rem}
+.pitem{display:flex;align-items:center;gap:10px;font-size:.83rem;color:var(--ink2);padding:.28rem .4rem;border-radius:6px;transition:background .2s,padding-left .25s var(--ease)}
+.pitem:hover{background:var(--navyp);padding-left:.7rem}
+.pck{color:var(--navym);font-size:.7rem;font-weight:600}
 
-/* ── FOOTER ── */
+/* FOOTER */
 footer{background:var(--ink);padding:2.75rem 5.5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
-.foot-brand{font-family:var(--serif);font-size:1.05rem;color:#fff;cursor:pointer;transition:color .2s}
-.foot-brand:hover{color:#C8D0E8}
-.foot-brand em{font-style:italic;color:#9AA8CC}
-.foot-copy{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;color:rgba(255,255,255,.3)}
-.foot-links{display:flex;gap:1.75rem}
-.foot-link{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);text-decoration:none;cursor:pointer;background:none;border:none;position:relative;transition:color .2s}
-.foot-link::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1px;background:#fff;transition:width .3s var(--ease)}
-.foot-link:hover{color:#fff}
-.foot-link:hover::after{width:100%}
+.fbrand{font-family:var(--serif);font-size:1.05rem;color:#fff;background:none;border:none;cursor:pointer;transition:color .2s}
+.fbrand:hover{color:#C8D0E8}
+.fbrand em{font-style:italic;color:#9AA8CC}
+.fcopy{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;color:rgba(255,255,255,.28)}
+.fnav{display:flex;gap:1.75rem}
+.flink{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.38);text-decoration:none;background:none;border:none;cursor:pointer;position:relative;transition:color .2s}
+.flink::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1px;background:#fff;transition:width .3s var(--ease)}
+.flink:hover{color:#fff}
+.flink:hover::after{width:100%}
 
-/* ── MOBILE ── */
+/* MOBILE */
 @media(max-width:920px){
-  .nav-links,.nav-hire{display:none}
+  .nav-links,.nhire{display:none}
   .hamburger{display:block}
   body{cursor:auto}
   .cur-dot,.cur-ring{display:none!important}
-  .about-grid,.contact-grid{grid-template-columns:1fr;gap:3rem}
+  .about-grid,.cgr{grid-template-columns:1fr;gap:3rem}
   .skills-grid{grid-template-columns:1fr}
   .skills-top{grid-template-columns:1fr;gap:2rem;margin-bottom:3rem}
   .exp-row{grid-template-columns:1fr;gap:.75rem}
   .proj-row{grid-template-columns:1fr;gap:1rem;padding-left:0!important}
   .proj-right{align-items:flex-start;flex-direction:row;flex-wrap:wrap}
-  .proj-tags{justify-content:flex-start}
-  .learn-grid,.certs-grid{grid-template-columns:1fr}
+  .ptags{justify-content:flex-start}
+  .lgrid,.cgrid,.arc-row{grid-template-columns:1fr 1fr}
   .hero-stats{flex-wrap:wrap}
   .stat{padding-right:2rem;margin-right:2rem;margin-bottom:1.25rem}
-  .hero-bgword,.hero-dotgrid{display:none}
+  .hero-bgword,.dotgrid,.geo{display:none}
 }
 @media(max-width:600px){
+  .lgrid,.cgrid,.arc-row{grid-template-columns:1fr}
   .stat{width:calc(50% - 2rem)}
 }
 </style>
@@ -333,118 +371,65 @@ footer{background:var(--ink);padding:2.75rem 5.5%;display:flex;justify-content:s
 <script type="text/babel">
 const { useState, useEffect, useRef, useCallback } = React;
 
-/* ── DATA ── */
-const EMAIL = 'gunachanthiran2486' + '@' + 'gmail.com';
+const EMAIL   = 'gunachanthiran2486' + '@' + 'gmail.com';
 const LINKEDIN = 'https://www.linkedin.com/in/gunachanthiran-k-a89747246/';
-const GITHUB = 'https://github.com/Gunachanthiran';
-
-const NAV_ITEMS = ['about','skills','experience','projects','learning','contact'];
-
-const SKILLS = [
-  { title:'Languages', color:'mn', items:['Java','Python','JavaScript','TypeScript'] },
-  { title:'Testing Tools', color:'mr', items:['Selenium WebDriver','Playwright','Cypress','Appium','TestComplete','Postman','Rest Assured'] },
-  { title:'Frameworks & Architecture', color:'mg', items:['TestNG','JUnit','Cucumber / BDD','Page Object Model','Allure Reports','Framework Design'] },
-  { title:'CI/CD & DevOps', color:'ms', items:['Jenkins','GitHub Actions','Docker','Git'] },
-  { title:'Testing Disciplines', color:'mn', items:['End-to-End Testing','Regression Testing','API Testing','Functional Testing','Integration Testing','Data Validation','Root Cause Analysis'] },
-  { title:'Dev & Utility Tools', color:'mr', items:['Excel Automation','Web Scraping','Bot Development','Python Scripting','Jira'] },
-];
-
-const PROJECTS = [
-  { n:'01', name:'Spinny Automation Framework', domain:'Web · Mobile · Reporting',
-    desc:'Full-stack test automation framework for the Spinny platform covering web and mobile surfaces. Built with Playwright and TypeScript using Page Object Model. Supports parallel execution, cross-browser runs, and rich Allure HTML dashboards.',
-    tags:['Playwright','TypeScript','Allure','POM'] },
-  { n:'02', name:'LinkedIn Lead Automation', domain:'Scraping · Process Automation',
-    desc:'Python and Selenium tool that automates lead discovery on LinkedIn. Handles session management, paginated traversal, structured profile extraction, and configurable filtering logic. Outputs organised data for downstream workflows.',
-    tags:['Python','Selenium','Chrome'] },
-  { n:'03', name:'Telegram Course Scraper', domain:'Async Scraping · Excel Automation',
-    desc:'Asynchronous Telegram channel extractor using Telethon. Navigates histories, extracts structured course metadata and media links, outputs clean multi-sheet Excel reports. Handles pagination, rate limiting, and session persistence.',
-    tags:['Python','Telethon','OpenPyXL'] },
-  { n:'04', name:'Amazon Price Tracker', domain:'Monitoring · Alerting',
-    desc:'Real-time Amazon price monitoring system. Tracks multiple listings, logs price history with timestamps, evaluates drop thresholds, and dispatches automated email alerts. Designed to run unattended on a schedule.',
-    tags:['Python','BeautifulSoup','SMTP'] },
-  { n:'05', name:'Desktop Automation Framework', domain:'Enterprise · WPF · Industrial',
-    desc:'Enterprise-grade automation framework for complex WPF desktop applications. Custom object tree mapping, topology export automation, reusable action libraries, and structured reporting — built for stability across multi-version product cycles.',
-    tags:['TestComplete','WPF','Python'] },
-];
-
-const LEARNING = [
-  { n:'01', title:'Advanced Playwright Framework Design', body:'Deep-diving into fixtures, custom reporters, test sharding, API mocking, and component testing. Building production-grade patterns beyond the standard quick-start.', pct:75 },
-  { n:'02', title:'API Testing at Scale', body:'Advancing Rest Assured and Postman/Newman for large-scale API contract testing, collection-driven pipelines, and data-driven validation with structured reporting.', pct:60 },
-  { n:'03', title:'CI/CD for Test Automation', body:'Integrating test suites into Jenkins and GitHub Actions — scheduled runs, parallelism, Docker containerised execution, and automated failure notifications.', pct:50 },
-];
+const GITHUB   = 'https://github.com/Gunachanthiran';
+const SECTIONS = ['about','skills','experience','projects','learning','contact'];
 
 /* ── SMOOTH SCROLL ── */
-function scrollTo(id) {
+function goTo(id) {
   const el = document.getElementById(id);
   if (!el) return;
-  const top = el.getBoundingClientRect().top + window.pageYOffset - 78;
-  window.scrollTo({ top, behavior: 'smooth' });
+  window.scrollTo({ top: el.getBoundingClientRect().top + window.pageYOffset - 78, behavior: 'smooth' });
+}
+
+/* ── USE REVEAL ── */
+function useReveal(threshold = 0.1) {
+  const ref = useRef(null);
+  const [vis, setVis] = useState(false);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVis(true); }, { threshold });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  return [ref, vis];
 }
 
 /* ── CURSOR ── */
 function Cursor() {
-  const dotRef  = useRef(null);
-  const ringRef = useRef(null);
+  const dotRef = useRef(null); const ringRef = useRef(null);
   const [state, setState] = useState('idle');
-  const mx = useRef(-200), my = useRef(-200);
-  const rx = useRef(-200), ry = useRef(-200);
-  const rafId = useRef(null);
-
+  const mx = useRef(-300); const my = useRef(-300);
+  const rx = useRef(-300); const ry = useRef(-300);
   useEffect(() => {
-    const onMove = e => {
-      mx.current = e.clientX;
-      my.current = e.clientY;
-      if (dotRef.current) {
-        dotRef.current.style.left = e.clientX + 'px';
-        dotRef.current.style.top  = e.clientY + 'px';
-      }
-      setState(s => s === 'idle' ? 'default' : s);
+    const move = e => { mx.current = e.clientX; my.current = e.clientY;
+      if (dotRef.current) { dotRef.current.style.left = e.clientX+'px'; dotRef.current.style.top = e.clientY+'px'; }
+      setState(s => s === 'idle' ? 'def' : s);
     };
-    const onLeave = () => setState('idle');
-    document.addEventListener('mousemove', onMove);
-    document.addEventListener('mouseleave', onLeave);
-
-    // Ring animation loop
+    const leave = () => setState('idle');
+    document.addEventListener('mousemove', move);
+    document.addEventListener('mouseleave', leave);
     const loop = () => {
-      rx.current += (mx.current - rx.current) * 0.13;
-      ry.current += (my.current - ry.current) * 0.13;
-      if (ringRef.current) {
-        ringRef.current.style.left = rx.current + 'px';
-        ringRef.current.style.top  = ry.current + 'px';
-      }
-      rafId.current = requestAnimationFrame(loop);
+      rx.current += (mx.current - rx.current) * 0.12;
+      ry.current += (my.current - ry.current) * 0.12;
+      if (ringRef.current) { ringRef.current.style.left = rx.current+'px'; ringRef.current.style.top = ry.current+'px'; }
+      requestAnimationFrame(loop);
     };
-    rafId.current = requestAnimationFrame(loop);
-
-    // Delegate cursor states
-    const handlers = [];
-    const add = (sel, enter, leave) => {
+    requestAnimationFrame(loop);
+    const bind = (sel, st) => {
       document.querySelectorAll(sel).forEach(el => {
-        const h1 = () => setState(enter);
-        const h2 = () => setState(leave || 'default');
-        el.addEventListener('mouseenter', h1);
-        el.addEventListener('mouseleave', h2);
-        handlers.push({ el, h1, h2 });
+        el.addEventListener('mouseenter', () => setState(st));
+        el.addEventListener('mouseleave', () => setState('def'));
       });
     };
-    add('.btn-p,.btn-g,.nav-hire,.proj-btn', 'onbtn');
-    add('a:not(.btn-p):not(.btn-g):not(.proj-btn),.pill,.chip,.role-tag,.nav-link,.foot-link', 'onlink');
-    add('.about-body p,.exp-summary,.proj-desc,.hero-desc,.contact-body', 'ontext');
-    add('[data-tilt]', 'oncard');
-
-    return () => {
-      document.removeEventListener('mousemove', onMove);
-      document.removeEventListener('mouseleave', onLeave);
-      cancelAnimationFrame(rafId.current);
-      handlers.forEach(({ el, h1, h2 }) => {
-        el.removeEventListener('mouseenter', h1);
-        el.removeEventListener('mouseleave', h2);
-      });
-    };
+    bind('.btn-p,.btn-g,.nhire,.pbtn', 'btn');
+    bind('a:not(.btn-p):not(.btn-g):not(.pbtn),.pill,.chip,.rtag,.nlink,.flink', 'lnk');
+    bind('.about-body p,.exp-sum,.pdesc,.hero-desc,.cbody', 'txt');
+    bind('[data-tilt]', 'crd');
+    return () => { document.removeEventListener('mousemove', move); document.removeEventListener('mouseleave', leave); };
   }, []);
-
   return <>
-    <div ref={dotRef}  className={`cur-dot  ${state}`} />
+    <div ref={dotRef}  className={`cur-dot ${state}`} />
     <div ref={ringRef} className={`cur-ring ${state}`} />
   </>;
 }
@@ -453,201 +438,190 @@ function Cursor() {
 function ProgressBar() {
   const [w, setW] = useState(0);
   useEffect(() => {
-    const onScroll = () => {
+    const h = () => {
       const dh = document.documentElement.scrollHeight - window.innerHeight;
-      setW(dh > 0 ? (window.pageYOffset / dh * 100) : 0);
+      setW(dh > 0 ? window.pageYOffset / dh * 100 : 0);
     };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    window.addEventListener('scroll', h, { passive: true });
+    return () => window.removeEventListener('scroll', h);
   }, []);
-  return <div className="progress" style={{ width: w + '%' }} />;
+  return <div className="progress" style={{ width: w+'%' }} />;
 }
 
-/* ── TILT CARD ── */
-function TiltCard({ children, className }) {
+/* ── TILT ── */
+function Tilt({ children, className }) {
   const ref = useRef(null);
   const onMove = e => {
     const r = ref.current.getBoundingClientRect();
-    const dx = (e.clientX - r.left - r.width/2)  / (r.width/2);
-    const dy = (e.clientY - r.top  - r.height/2) / (r.height/2);
+    const dx = (e.clientX - r.left - r.width/2) / (r.width/2);
+    const dy = (e.clientY - r.top - r.height/2) / (r.height/2);
     ref.current.style.transform = `perspective(800px) rotateX(${dy*-7}deg) rotateY(${dx*7}deg) scale(1.02)`;
-    ref.current.style.boxShadow = `0 ${8+Math.abs(dy*7)}px ${24+Math.abs(dx*7)*2}px rgba(25,40,90,0.12)`;
+    ref.current.style.boxShadow = `0 ${8+Math.abs(dy*7)}px ${26+Math.abs(dx*6)*2}px rgba(24,39,90,0.11)`;
   };
-  const onLeave = () => {
-    ref.current.style.transform = '';
-    ref.current.style.boxShadow = '';
-  };
+  const onLeave = () => { ref.current.style.transform = ''; ref.current.style.boxShadow = ''; };
   return <div ref={ref} data-tilt className={className} onMouseMove={onMove} onMouseLeave={onLeave}>{children}</div>;
 }
 
-/* ── MAGNETIC BUTTON ── */
-function MagBtn({ children, className, onClick, href, target }) {
+/* ── MAGNETIC ── */
+function Mag({ children, className, onClick, href, target }) {
   const ref = useRef(null);
-  const onMove = e => {
+  const move = e => {
     const r = ref.current.getBoundingClientRect();
-    const dx = (e.clientX - r.left - r.width/2)  * 0.22;
-    const dy = (e.clientY - r.top  - r.height/2) * 0.22;
-    ref.current.style.transform = `translate(${dx}px,${dy}px)`;
+    ref.current.style.transform = `translate(${(e.clientX-r.left-r.width/2)*.22}px,${(e.clientY-r.top-r.height/2)*.22}px)`;
   };
-  const onLeave = () => { ref.current.style.transform = ''; };
+  const leave = () => { ref.current.style.transform = ''; };
   const Tag = href ? 'a' : 'button';
-  return <Tag ref={ref} className={className} onMouseMove={onMove} onMouseLeave={onLeave}
-    onClick={onClick} href={href} target={target} rel={target ? 'noopener' : undefined}>
-    {children}
-  </Tag>;
-}
-
-/* ── REVEAL ── */
-function useReveal(threshold = 0.1) {
-  const ref = useRef(null);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold });
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, []);
-  return [ref, visible];
+  return <Tag ref={ref} className={className} onMouseMove={move} onMouseLeave={leave}
+    onClick={onClick} href={href} target={target} rel={target?'noopener':undefined}>{children}</Tag>;
 }
 
 /* ── TITLE LINE ── */
-function TitleLine({ children }) {
+function TL({ children }) {
   const [ref, vis] = useReveal(0.3);
-  return <span ref={ref} className={`tl ${vis ? 'visible' : 'hidden'}`}>{children}</span>;
+  return <span ref={ref} className={`tl ${vis?'v':'h'}`}>{children}</span>;
 }
 
 /* ── COUNTER ── */
 function Counter({ to, suffix='', text }) {
-  const [val, setVal] = useState(0);
-  const [started, setStarted] = useState(false);
-  const ref = useRef(null);
+  const [val, setVal] = useState('0');
+  const ref = useRef(null); const done = useRef(false);
   useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setStarted(true); }, { threshold: 0.5 });
+    const obs = new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting || done.current) return;
+      done.current = true;
+      if (text) { setTimeout(() => setVal(text), 500); return; }
+      let s; const d = 1200;
+      const step = ts => {
+        if (!s) s = ts;
+        const p = Math.min((ts-s)/d, 1), ease = 1-Math.pow(1-p,3);
+        setVal(Math.round(ease*to)+suffix);
+        if (p<1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }, { threshold: 0.5 });
     if (ref.current) obs.observe(ref.current);
     return () => obs.disconnect();
   }, []);
-  useEffect(() => {
-    if (!started) return;
-    if (text) { setTimeout(() => setVal(text), 400); return; }
-    let start; const dur = 1200;
-    const step = ts => {
-      if (!start) start = ts;
-      const p = Math.min((ts - start) / dur, 1);
-      const e = 1 - Math.pow(1 - p, 3);
-      setVal(Math.round(e * to) + suffix);
-      if (p < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }, [started]);
-  return <div ref={ref} className="stat-n">{val || (text ? '—' : '0')}</div>;
+  return <div ref={ref} className="stn" dangerouslySetInnerHTML={{ __html: val }} />;
 }
 
-/* ── PROGRESS BAR CARD ── */
-function LCard({ item, delay }) {
+/* ── ARC SVG ── */
+function Arc({ pct, color, size=80 }) {
   const [ref, vis] = useReveal(0.4);
-  const [started, setStarted] = useState(false);
-  useEffect(() => { if (vis) setStarted(true); }, [vis]);
+  const [p, setP] = useState(0);
+  useEffect(() => { if (vis) setTimeout(() => setP(pct), 200); }, [vis]);
+  const r = 30; const circ = 2 * Math.PI * r;
+  const dash = circ * p / 100;
   return (
-    <div ref={ref} className={`lcard reveal ${vis ? 'in' : ''}`} style={{ transitionDelay: delay }}>
-      <div className="lcard-n">0{item.n} — In Progress</div>
-      <div className="lcard-t">{item.title}</div>
-      <div className="lcard-b">{item.body}</div>
-      <div className="prog-bar">
-        <div className="prog-fill" style={{ width: started ? item.pct + '%' : 0 }} />
+    <svg ref={ref} width={size} height={size} viewBox="0 0 80 80">
+      <circle cx="40" cy="40" r={r} fill="none" stroke="rgba(14,14,19,0.07)" strokeWidth="4"/>
+      <circle cx="40" cy="40" r={r} fill="none" stroke={color} strokeWidth="4"
+        strokeDasharray={`${dash} ${circ}`} strokeDashoffset={circ/4}
+        strokeLinecap="round"
+        style={{ transition: 'stroke-dasharray 1.4s cubic-bezier(0.22,1,0.36,1)' }}/>
+      <text x="40" y="44" textAnchor="middle" fontFamily="JetBrains Mono,monospace" fontSize="13" fontWeight="500" fill={color}>{p}%</text>
+    </svg>
+  );
+}
+
+/* ── MARQUEE ── */
+const MARQUEE_ITEMS = [
+  'Selenium WebDriver','Playwright','Cypress','Appium','TestComplete','Postman','Rest Assured',
+  'TestNG','JUnit','Cucumber','BDD','Allure Reports','Page Object Model',
+  'Jenkins','GitHub Actions','Docker','Java','Python','TypeScript','JavaScript',
+  'Web Automation','Mobile Automation','Desktop Automation','API Automation','CI/CD',
+];
+function Marquee() {
+  const doubled = [...MARQUEE_ITEMS, ...MARQUEE_ITEMS];
+  return (
+    <div className="marquee-strip">
+      <div className="marquee-track">
+        {doubled.map((item, i) => (
+          <div key={i} className={`marquee-item ${i % 5 === 0 ? 'hi' : ''}`}>
+            <div className="dot" />{item}
+          </div>
+        ))}
       </div>
-      <div className="prog-lbl"><span>In Progress</span><span>{item.pct}%</span></div>
     </div>
   );
 }
 
 /* ── NAV ── */
-function Nav({ active, mobileOpen, setMobile }) {
-  const [scrolled, setScrolled] = useState(false);
+function Nav({ active, mOpen, setMOpen }) {
+  const [sc, setSc] = useState(false);
   useEffect(() => {
-    const h = () => setScrolled(window.pageYOffset > 60);
+    const h = () => setSc(window.pageYOffset > 60);
     window.addEventListener('scroll', h, { passive: true });
     return () => window.removeEventListener('scroll', h);
   }, []);
+  const close = id => { goTo(id); setMOpen(false); };
   return <>
-    <nav className={`nav ${scrolled ? 'scrolled' : ''}`}>
-      <button className="nav-logo" onClick={() => scrollTo('hero')}>Guna<em>chanthiran</em></button>
+    <nav className={`nav ${sc?'sc':''}`}>
+      <button className="nav-logo" onClick={() => goTo('hero')}>Guna<em>chanthiran</em></button>
       <ul className="nav-links">
-        {NAV_ITEMS.map(id => (
+        {SECTIONS.map(id => (
           <li key={id}>
-            <button className={`nav-link ${active === id ? 'active' : ''}`} onClick={() => scrollTo(id)}>
-              {id.charAt(0).toUpperCase() + id.slice(1)}
+            <button className={`nlink ${active===id?'on':''}`} onClick={() => goTo(id)}>
+              {id[0].toUpperCase()+id.slice(1)}
             </button>
           </li>
         ))}
       </ul>
-      <a className="nav-hire" href={`mailto:${EMAIL}`}>Hire Me</a>
-      <button className="hamburger" onClick={() => setMobile(true)}>&#9776;</button>
+      <a className="nhire" href={`mailto:${EMAIL}`}>Hire Me</a>
+      <button className="hamburger" onClick={() => setMOpen(true)}>&#9776;</button>
     </nav>
-
-    {/* FULL SCREEN MOBILE MENU */}
-    <div className={`mobile-menu ${mobileOpen ? 'open' : ''}`}>
-      <button className="mobile-close" onClick={() => setMobile(false)}>&#10005;</button>
-      {NAV_ITEMS.map(id => (
-        <button key={id} className="mobile-link" onClick={() => { scrollTo(id); setMobile(false); }}>
-          {id.charAt(0).toUpperCase() + id.slice(1)}
+    <div className={`mmenu ${mOpen?'open':''}`}>
+      <button className="mclose" onClick={() => setMOpen(false)}>&#10005;</button>
+      {SECTIONS.map(id => (
+        <button key={id} className="mlink" onClick={() => close(id)}>
+          {id[0].toUpperCase()+id.slice(1)}
         </button>
       ))}
     </div>
   </>;
 }
 
-/* ── HERO SECTION ── */
+/* ── HERO ── */
 function Hero() {
   const spotRef = useRef(null);
-  const [name1, setName1] = useState('Guna');
-  const [name2, setName2] = useState('chanthiran');
-
-  // Text scramble
+  const [n1, setN1] = useState('Guna'); const [n2, setN2] = useState('chanthiran');
   useEffect(() => {
-    const chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz';
-    const scramble = (target, setter, delay) => {
-      setTimeout(() => {
-        let f = 0, total = 38;
-        const t = setInterval(() => {
-          let out = '';
-          for (let i = 0; i < target.length; i++) {
-            out += (f/total > i/target.length) ? target[i] : chars[Math.floor(Math.random()*chars.length)];
-          }
-          setter(out);
-          if (++f > total) { setter(target); clearInterval(t); }
-        }, 16);
-      }, delay);
-    };
-    scramble('Guna', setName1, 400);
-    scramble('chanthiran', setName2, 700);
+    const c = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz';
+    const sc = (tgt, set, delay) => setTimeout(() => {
+      let f=0, tot=38;
+      const t = setInterval(() => {
+        let o='';
+        for(let i=0;i<tgt.length;i++) o += (f/tot>i/tgt.length)?tgt[i]:c[Math.floor(Math.random()*c.length)];
+        set(o);
+        if(++f>tot){set(tgt);clearInterval(t);}
+      },16);
+    }, delay);
+    sc('Guna',setN1,400); sc('chanthiran',setN2,750);
   }, []);
-
-  const onMouseMove = e => {
+  const onMove = e => {
     if (!spotRef.current) return;
     const r = spotRef.current.parentElement.getBoundingClientRect();
-    const px = ((e.clientX - r.left) / r.width * 100).toFixed(1);
-    const py = ((e.clientY - r.top) / r.height * 100).toFixed(1);
-    spotRef.current.style.background =
-      `radial-gradient(480px circle at ${px}% ${py}%, rgba(25,40,90,0.065) 0%, transparent 68%)`;
+    const px = ((e.clientX-r.left)/r.width*100).toFixed(1);
+    const py = ((e.clientY-r.top)/r.height*100).toFixed(1);
+    spotRef.current.style.background = `radial-gradient(480px circle at ${px}% ${py}%, rgba(24,39,90,0.06) 0%, transparent 65%)`;
   };
-
   return (
-    <section id="hero" className="hero" onMouseMove={onMouseMove}>
+    <section id="hero" style={{minHeight:'100vh',display:'flex',alignItems:'center',position:'relative',overflow:'hidden',background:'var(--paper)'}} onMouseMove={onMove}>
       <div ref={spotRef} className="hero-spotlight" />
-      <div className="hero-dotgrid" />
+      <div className="dotgrid" />
+      {/* Floating geometric accents */}
+      <div className="geo geo-1" />
+      <div className="geo geo-2" />
+      <div className="geo geo-3" />
+      <div className="geo geo-4" />
+      <div className="geo geo-5" />
       <div className="hero-bgword">SDET</div>
       <div className="wrap">
         <div className="hero-inner">
-          <div className="hero-badge">
-            <div className="badge-dot" />
-            Available for Opportunities
-          </div>
-          <h1 className="hero-name">
-            {name1}<span className="it">{name2}</span>
-          </h1>
+          <div className="hero-badge"><div className="bdot"/>Available for Opportunities</div>
+          <h1 className="hero-name">{n1}<span className="it">{n2}</span></h1>
           <div className="hero-sub">
-            {['QA Engineer','SDET','Automation Architect','QA Developer'].map(r => (
-              <span key={r} className="hero-sub-item">{r}</span>
-            ))}
+            {['QA Engineer','SDET','Automation Architect','QA Developer'].map(r=><span key={r} className="hsi">{r}</span>)}
           </div>
           <p className="hero-desc">
             I build the safety nets that catch defects before your users ever encounter them.
@@ -655,21 +629,21 @@ function Hero() {
             <strong>web, mobile, desktop and API</strong> surfaces with precision and care.
           </p>
           <div className="hero-btns">
-            <MagBtn className="btn-p" onClick={() => scrollTo('projects')}>
-              <div className="fill" /><span>View My Work</span>
-            </MagBtn>
-            <MagBtn className="btn-g" onClick={() => scrollTo('contact')}>
-              <div className="fill" /><span>Get in Touch</span>
-            </MagBtn>
-            <MagBtn className="btn-g" href={GITHUB} target="_blank">
-              <div className="fill" /><span>GitHub</span><span className="btn-arr">&#8599;</span>
-            </MagBtn>
+            <Mag className="btn-p" onClick={() => goTo('projects')}>
+              <div className="fill"/><span>View My Work</span>
+            </Mag>
+            <Mag className="btn-g" onClick={() => goTo('contact')}>
+              <div className="fill"/><span>Get in Touch</span>
+            </Mag>
+            <Mag className="btn-g" href={GITHUB} target="_blank">
+              <div className="fill"/><span>GitHub</span><span className="barr">&#8599;</span>
+            </Mag>
           </div>
           <div className="hero-stats">
-            <div className="stat"><Counter to={4} /><div className="stat-l">Automation Domains</div></div>
-            <div className="stat"><Counter to={10} suffix="+" /><div className="stat-l">Tools &amp; Frameworks</div></div>
-            <div className="stat"><Counter to={5} suffix="+" /><div className="stat-l">Real Projects</div></div>
-            <div className="stat"><Counter text="1&#8211;3" /><div className="stat-l">Years Experience</div></div>
+            <div className="stat"><Counter to={4}/><div className="stl">Automation Domains</div></div>
+            <div className="stat"><Counter to={10} suffix="+"/><div className="stl">Tools &amp; Frameworks</div></div>
+            <div className="stat"><Counter to={5} suffix="+"/><div className="stl">Real Projects</div></div>
+            <div className="stat"><Counter text="1&#8211;3"/><div className="stl">Years Experience</div></div>
           </div>
         </div>
       </div>
@@ -679,38 +653,59 @@ function Hero() {
 
 /* ── ABOUT ── */
 function About() {
-  const [r1, v1] = useReveal(); const [r2, v2] = useReveal();
-  const bqRef = useRef(null); const [bqAnim, setBqAnim] = useState(false);
+  const [r1,v1] = useReveal(); const [r2,v2] = useReveal();
+  const bqRef = useRef(null); const [bqA, setBqA] = useState(false);
   useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setBqAnim(true); }, { threshold: 0.5 });
-    if (bqRef.current) obs.observe(bqRef.current);
+    const obs = new IntersectionObserver(([e]) => { if(e.isIntersecting) setBqA(true); }, { threshold:.5 });
+    if(bqRef.current) obs.observe(bqRef.current);
     return () => obs.disconnect();
   }, []);
   return (
-    <section id="about"><div className="wrap">
+    <section id="about" style={{background:'var(--paper2)'}}><div className="wrap">
       <div className="eyebrow">01 &mdash; About</div>
-      <h2 className="sec-title"><TitleLine>Quality is my <span className="it">discipline.</span></TitleLine></h2>
+      <h2 className="sec-t"><TL>Quality is my <span className="it">discipline.</span></TL></h2>
       <p className="sec-lead">More than test execution &mdash; I design automation systems that scale, fail gracefully, and report with clarity.</p>
       <div className="about-grid">
         <div ref={r1} className={`about-body reveal ${v1?'in':''}`}>
-          <p>I am a <strong>QA Engineer and Automation Developer</strong> who works at the crossover between quality assurance and software engineering. My work is not confined to writing test scripts &mdash; it extends to designing <span className="ac">framework architecture</span>, building reusable automation infrastructure, and developing Python tooling that eliminates manual overhead across entire teams.</p>
+          <p>I am a <strong>QA Engineer and Automation Developer</strong> who operates at the crossover between quality assurance and software engineering. My work extends to designing <span className="ac">framework architecture</span>, building reusable automation infrastructure, and developing Python tooling that eliminates manual overhead.</p>
           <p>At <strong>Schneider Electric</strong>, I work on industrial-grade desktop software used by electrical engineers worldwide. This demands precision: automating <strong>WPF applications</strong> with non-standard controls, mapping complex object trees, and maintaining regression suites covering topology exports and configuration workflows.</p>
-          <div ref={bqRef} className={`bq ${bqAnim?'animate':''}`}>"Breaking software before users do &mdash; methodically, repeatedly, and at scale."</div>
-          <p>Outside enterprise work, I pursue personal automation projects &mdash; from <strong>Playwright-based cross-platform frameworks</strong> to Python bots and scraping utilities. Great automation engineers think like developers first.</p>
+          <div ref={bqRef} className={`bq ${bqA?'anim':''}`}>"Breaking software before users do &mdash; methodically, repeatedly, and at scale."</div>
+          <p>Outside enterprise work, I pursue personal automation projects &mdash; from <strong>Playwright-based cross-platform frameworks</strong> to Python bots and scraping utilities.</p>
         </div>
-        <div ref={r2} className={`info-cards reveal d1 ${v2?'in':''}`}>
-          <TiltCard className="icard">
-            <div className="icard-lbl">Profile</div>
-            {[['Full Name','Gunachanthiran'],['Role','QA Engineer / SDET'],['Experience','1–3 Years'],['Location','India'],['Work Mode','Remote / Hybrid / On-site'],['Status','Open to Hire','g']].map(([k,v,cls]) => (
-              <div key={k} className="irow"><span className="irow-k">{k}</span><span className={`irow-v ${cls||''}`}>{v}</span></div>
+        <div ref={r2} className={`reveal d1 ${v2?'in':''}`}>
+          <Tilt className="icard" style={{marginBottom:'1.25rem',background:'var(--paper)',border:'1px solid var(--bd)',borderRadius:'var(--r)',padding:'1.6rem 1.75rem',transition:'box-shadow .35s var(--ease),border-color .25s,transform .35s var(--ease)'}}>
+            <div className="icard-lbl" style={{fontFamily:'var(--mono)',fontSize:'.6rem',letterSpacing:'.18em',textTransform:'uppercase',color:'var(--navym)',marginBottom:'1rem'}}>Profile</div>
+            {[['Full Name','Gunachanthiran'],['Role','QA Engineer / SDET'],['Experience','1–3 Years'],['Location','India'],['Work Mode','Remote / Hybrid / On-site'],['Status','Open to Hire','var(--green)']].map(([k,v,c])=>(
+              <div key={k} style={{display:'flex',justifyContent:'space-between',alignItems:'baseline',gap:'1rem',fontSize:'.85rem',padding:'.48rem 0',borderBottom:'1px solid var(--bd)'}}>
+                <span style={{color:'var(--ink3)'}}>{k}</span>
+                <span style={{color:c||'var(--ink)',fontWeight:500,textAlign:'right'}}>{v}</span>
+              </div>
             ))}
-          </TiltCard>
-          <TiltCard className="icard">
-            <div className="icard-lbl">Automation Coverage</div>
-            {[['Web','Selenium · Playwright · Cypress'],['Mobile','Appium'],['Desktop','TestComplete · WPF'],['API','Postman · Rest Assured']].map(([k,v]) => (
-              <div key={k} className="irow"><span className="irow-k">{k}</span><span className="irow-v">{v}</span></div>
-            ))}
-          </TiltCard>
+          </Tilt>
+          {/* TERMINAL CARD */}
+          <div className="terminal">
+            <div className="term-bar">
+              <span className="term-dot r"/><span className="term-dot y"/><span className="term-dot g"/>
+              <span className="term-title">engineer.config.ts</span>
+            </div>
+            <div className="term-body">
+              <div><span className="t-comment">// Gunachanthiran.config</span></div>
+              <div>&nbsp;</div>
+              <div><span className="t-cyan">const</span> <span className="t-key">me</span> = {'{'}</div>
+              <div>&nbsp; <span className="t-key">role</span>: <span className="t-str">"SDET / QA Developer"</span>,</div>
+              <div>&nbsp; <span className="t-key">company</span>: <span className="t-str">"Schneider Electric"</span>,</div>
+              <div>&nbsp; <span className="t-key">domains</span>: [</div>
+              <div>&nbsp; &nbsp; <span className="t-str">"Web"</span>, <span className="t-str">"Mobile"</span>,</div>
+              <div>&nbsp; &nbsp; <span className="t-str">"Desktop"</span>, <span className="t-str">"API"</span></div>
+              <div>&nbsp; ],</div>
+              <div>&nbsp; <span className="t-key">stack</span>: [<span className="t-str">"Java"</span>, <span className="t-str">"Python"</span>, <span className="t-str">"TS"</span>],</div>
+              <div>&nbsp; <span className="t-key">openToWork</span>: <span className="t-num">true</span>,</div>
+              <div>{'}'}</div>
+              <div>&nbsp;</div>
+              <div><span className="t-prompt">&#62;</span> <span className="t-val">me.openToWork</span></div>
+              <div style={{color:'#9ECE6A'}}>&#9654; true</div>
+            </div>
+          </div>
         </div>
       </div>
     </div></section>
@@ -718,27 +713,48 @@ function About() {
 }
 
 /* ── SKILLS ── */
+const SKILL_GROUPS = [
+  { t:'Languages', c:'mn', items:['Java','Python','JavaScript','TypeScript'] },
+  { t:'Testing Tools', c:'mr', items:['Selenium WebDriver','Playwright','Cypress','Appium','TestComplete','Postman','Rest Assured'] },
+  { t:'Frameworks & Architecture', c:'mg', items:['TestNG','JUnit','Cucumber / BDD','Page Object Model','Allure Reports','Framework Design'] },
+  { t:'CI/CD & DevOps', c:'ms', items:['Jenkins','GitHub Actions','Docker','Git'] },
+  { t:'Testing Disciplines', c:'mn', items:['End-to-End Testing','Regression Testing','API Testing','Functional Testing','Integration Testing','Data Validation','Root Cause Analysis'] },
+  { t:'Dev & Utility Tools', c:'mr', items:['Excel Automation','Web Scraping','Bot Development','Python Scripting','Jira'] },
+];
+const ARC_DATA = [
+  { name:'Web Automation', label:'Proficiency', pct:88, color:'#18275A' },
+  { name:'API Testing', label:'Proficiency', pct:82, color:'#2A3D8F' },
+  { name:'Desktop Auto.', label:'Proficiency', pct:78, color:'#BC4B2A' },
+  { name:'CI/CD', label:'Proficiency', pct:65, color:'#277842' },
+];
 function Skills() {
-  const [ref, vis] = useReveal();
+  const [ref,vis] = useReveal();
   return (
-    <section id="skills"><div className="wrap">
+    <section id="skills" style={{background:'var(--paper)'}}><div className="wrap">
       <div className="skills-top">
         <div>
           <div className="eyebrow">02 &mdash; Skills</div>
-          <h2 className="sec-title"><TitleLine>Full <span className="it">Tech Stack</span></TitleLine></h2>
+          <h2 className="sec-t"><TL>Full <span className="it">Tech Stack</span></TL></h2>
         </div>
         <p className="sec-lead">End-to-end automation capability spanning every layer of modern software &mdash; from UI to API, desktop to CI/CD pipeline.</p>
       </div>
+      {/* Arc proficiency cards */}
+      <div className="arc-row">
+        {ARC_DATA.map(d=>(
+          <div key={d.name} className="arc-card">
+            <Arc pct={d.pct} color={d.color}/>
+            <div className="arc-label">{d.label}</div>
+            <div className="arc-name">{d.name}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{height:'3.5rem'}}/>
       <div ref={ref} className={`skills-grid reveal ${vis?'in':''}`}>
-        {SKILLS.map(sg => (
-          <div key={sg.title}>
-            <div className="sg-t">{sg.title}</div>
+        {SKILL_GROUPS.map(sg=>(
+          <div key={sg.t}>
+            <div className="sgt">{sg.t}</div>
             <div className="pills">
-              {sg.items.map(it => (
-                <span key={it} className="pill">
-                  <span className={`pill-mark ${sg.color}`} />{it}
-                </span>
-              ))}
+              {sg.items.map(it=><span key={it} className="pill"><span className={`pm ${sg.c}`}/>{it}</span>)}
             </div>
           </div>
         ))}
@@ -749,11 +765,19 @@ function Skills() {
 
 /* ── EXPERIENCE ── */
 function Experience() {
-  const [ref, vis] = useReveal();
+  const [ref,vis] = useReveal();
+  const pts = [
+    ['Desktop Automation Framework','Designed and built a reusable TestComplete framework for WPF applications, implementing custom object identification for non-standard UI components.'],
+    ['Topology Export Automation','Automated industrial network topology export workflows, eliminating significant manual validation overhead across multiple product releases.'],
+    ['Python Utility Development','Built Python scripts for test data management, report generation, and batch data extraction, accelerating pre-release QA cycles.'],
+    ['Regression & Integration Testing','Maintained comprehensive functional and integration test suites across concurrent product versions in Agile delivery sprints.'],
+    ['Defect Analysis','Performed systematic root cause analysis on critical defects, partnering with engineering to reproduce, triage, and close high-priority issues.'],
+    ['Framework Architecture','Contributed to framework design decisions, code reviews, and QA process documentation within the engineering team.'],
+  ];
   return (
-    <section id="experience"><div className="wrap">
+    <section id="experience" style={{background:'var(--paper2)'}}><div className="wrap">
       <div className="eyebrow">03 &mdash; Experience</div>
-      <h2 className="sec-title"><TitleLine>Where I&#8217;ve <span className="it">Built.</span></TitleLine></h2>
+      <h2 className="sec-t"><TL>Where I&#8217;ve <span className="it">Built.</span></TL></h2>
       <p className="sec-lead">Enterprise-grade quality engineering with real-world complexity and measurable delivery impact.</p>
       <div className="exp-rows">
         <div ref={ref} className={`exp-row reveal ${vis?'in':''}`}>
@@ -764,21 +788,12 @@ function Experience() {
           </div>
           <div>
             <div className="exp-role">QA Engineer / Automation Engineer</div>
-            <p className="exp-summary">Industrial software testing for electrical design tools deployed to engineering organisations worldwide. Responsible for end-to-end automation coverage across complex WPF desktop applications &mdash; from object identification strategy to reusable framework architecture and release-cycle regression execution.</p>
+            <p className="exp-sum">Industrial software testing for electrical design tools deployed to engineering organisations worldwide. Responsible for end-to-end automation coverage across complex WPF desktop applications.</p>
             <ul className="exp-list">
-              {[
-                ['Desktop Automation Framework','Designed and built a reusable TestComplete framework for WPF applications, implementing custom object identification for non-standard UI components that standard mapping could not resolve.'],
-                ['Topology Export Automation','Automated industrial network topology export workflows, eliminating significant manual validation overhead across multiple product releases and configurations.'],
-                ['Python Utility Development','Built Python scripts for test data management, structured report generation, and batch data extraction, accelerating pre-release QA cycles.'],
-                ['Regression & Integration Testing','Maintained comprehensive functional and integration test suites across multiple concurrent product versions in Agile delivery sprints.'],
-                ['Defect Analysis','Performed systematic root cause analysis on critical defects, partnering with development engineering to reproduce, triage, and close high-priority issues before milestone releases.'],
-                ['Framework Architecture','Contributed to test framework design decisions, code review processes, and QA process documentation within the engineering team.'],
-              ].map(([h,t]) => <li key={h}><strong>{h}</strong> &mdash; {t}</li>)}
+              {pts.map(([h,t])=><li key={h}><strong>{h}</strong> &mdash; {t}</li>)}
             </ul>
             <div className="exp-chips">
-              {['TestComplete','WPF Automation','Python','Java','Regression Testing','Jenkins','Jira','Git'].map(c => (
-                <span key={c} className="chip">{c}</span>
-              ))}
+              {['TestComplete','WPF Automation','Python','Java','Regression Testing','Jenkins','Jira','Git'].map(c=><span key={c} className="chip">{c}</span>)}
             </div>
           </div>
         </div>
@@ -788,31 +803,31 @@ function Experience() {
 }
 
 /* ── PROJECTS ── */
+const PROJS = [
+  { n:'01', name:'Spinny Automation Framework', dom:'Web · Mobile · Reporting', desc:'Full-stack test automation framework for the Spinny platform covering web and mobile surfaces. Built with <strong>Playwright and TypeScript</strong> using Page Object Model. Supports parallel execution, cross-browser runs, and rich Allure HTML dashboards.', tags:['Playwright','TypeScript','Allure','POM'] },
+  { n:'02', name:'LinkedIn Lead Automation', dom:'Scraping · Process Automation', desc:'Python and Selenium tool automating lead discovery on LinkedIn. Handles session management, paginated traversal, structured profile extraction, and configurable filtering. Outputs organised data for downstream workflows.', tags:['Python','Selenium','Chrome'] },
+  { n:'03', name:'Telegram Course Scraper', dom:'Async Scraping · Excel Automation', desc:'Asynchronous Telegram channel extractor using <strong>Telethon</strong>. Extracts structured course metadata and media links, outputs clean multi-sheet Excel reports. Handles pagination, rate limiting, and session persistence.', tags:['Python','Telethon','OpenPyXL'] },
+  { n:'04', name:'Amazon Price Tracker', dom:'Monitoring · Alerting', desc:'Real-time Amazon price monitoring system. Tracks listings, logs history, evaluates drop thresholds, and dispatches automated email alerts. Designed to run unattended on a schedule.', tags:['Python','BeautifulSoup','SMTP'] },
+  { n:'05', name:'Desktop Automation Framework', dom:'Enterprise · WPF · Industrial', desc:'Enterprise-grade framework for complex WPF desktop applications. Custom object tree mapping, topology export routines, reusable action libraries, and structured reporting across multi-version product cycles.', tags:['TestComplete','WPF','Python'] },
+];
 function Projects() {
   return (
-    <section id="projects"><div className="wrap">
+    <section id="projects" style={{background:'var(--paper)'}}><div className="wrap">
       <div className="eyebrow">04 &mdash; Projects</div>
-      <h2 className="sec-title"><TitleLine>Selected <span className="it">Work.</span></TitleLine></h2>
+      <h2 className="sec-t"><TL>Selected <span className="it">Work.</span></TL></h2>
       <p className="sec-lead">Automation frameworks, utility tools, and systems built independently from the ground up.</p>
       <div className="proj-list">
-        {PROJECTS.map((p, i) => {
-          const [ref, vis] = useReveal();
+        {PROJS.map((p,i) => {
+          const [ref,vis] = useReveal();
           return (
-            <div key={p.n} ref={ref} className={`proj-row reveal ${vis?'in':''}`} style={{ transitionDelay: (i%3*0.07)+'s' }}>
-              <div>
-                <div className="proj-n">{p.n}</div>
-                <div className="proj-name">{p.name}</div>
-                <div className="proj-dom">{p.domain}</div>
-              </div>
-              <div className="proj-desc" dangerouslySetInnerHTML={{ __html: p.desc }} />
+            <div key={p.n} ref={ref} className={`proj-row reveal ${vis?'in':''}`} style={{transitionDelay:(i%3*.07)+'s'}}>
+              <div><div className="pnum">{p.n}</div><div className="pname">{p.name}</div><div className="pdom">{p.dom}</div></div>
+              <div className="pdesc" dangerouslySetInnerHTML={{__html:p.desc}}/>
               <div className="proj-right">
-                <a href={GITHUB} className="proj-btn" target="_blank" rel="noopener">
-                  <div className="fill" />
-                  <span>View Repo</span><span className="arr">&#8599;</span>
+                <a href={GITHUB} className="pbtn" target="_blank" rel="noopener">
+                  <div className="fill"/><span>View Repo</span><span className="arr">&#8599;</span>
                 </a>
-                <div className="proj-tags">
-                  {p.tags.map(t => <span key={t} className="pt">{t}</span>)}
-                </div>
+                <div className="ptags">{p.tags.map(t=><span key={t} className="pt">{t}</span>)}</div>
               </div>
             </div>
           );
@@ -823,45 +838,57 @@ function Projects() {
 }
 
 /* ── LEARNING ── */
+const LEARN = [
+  { n:'01', t:'Advanced Playwright Framework Design', b:'Deep-diving into fixtures, custom reporters, test sharding, API mocking, and component testing. Building production-grade patterns beyond the standard quick-start.', pct:75 },
+  { n:'02', t:'API Testing at Scale', b:'Advancing Rest Assured and Postman/Newman for large-scale API contract testing, collection-driven pipelines, and data-driven validation with structured reporting.', pct:60 },
+  { n:'03', t:'CI/CD for Test Automation', b:'Integrating test suites into Jenkins and GitHub Actions — scheduled runs, parallelism, Docker containerised execution, and automated failure notifications.', pct:50 },
+];
+function LCard({ item, delay }) {
+  const [ref,vis] = useReveal(0.4);
+  const [started, setStarted] = useState(false);
+  useEffect(() => { if(vis) setStarted(true); }, [vis]);
+  return (
+    <div ref={ref} className={`lcard reveal ${vis?'in':''}`} style={{transitionDelay:delay}}>
+      <div className="lcard-n">0{item.n} &mdash; In Progress</div>
+      <div className="lcard-t">{item.t}</div>
+      <div className="lcard-b">{item.b}</div>
+      <div className="pgbar"><div className="pgfill" style={{width:started?item.pct+'%':0}}/></div>
+      <div className="pglbl"><span>In Progress</span><span>{item.pct}%</span></div>
+    </div>
+  );
+}
 function Learning() {
   return (
-    <section id="learning"><div className="wrap">
+    <section id="learning" style={{background:'var(--paper2)'}}><div className="wrap">
       <div className="eyebrow">05 &mdash; Currently Learning</div>
-      <h2 className="sec-title"><TitleLine>Always <span className="it">Advancing.</span></TitleLine></h2>
+      <h2 className="sec-t"><TL>Always <span className="it">Advancing.</span></TL></h2>
       <p className="sec-lead">The automation landscape evolves constantly &mdash; I stay ahead with deliberate, focused upskilling.</p>
-      <div className="learn-grid">
-        {LEARNING.map((item, i) => <LCard key={item.n} item={item} delay={i*0.1+'s'} />)}
-      </div>
+      <div className="lgrid">{LEARN.map((item,i)=><LCard key={item.n} item={item} delay={i*.1+'s'}/>)}</div>
     </div></section>
   );
 }
 
 /* ── CERTS ── */
 function Certs() {
-  const certs = [
-    { name:'ISTQB Foundation Level', org:'ISTQB — International', note:'Software testing theory and methodology',
-      icon: <><circle cx="12" cy="8" r="4"/><path d="M12 14c-4 0-7 2-7 4v1h14v-1c0-2-3-4-7-4z"/></> },
-    { name:'Selenium WebDriver Certification', org:'Udemy / LinkedIn Learning', note:'Advanced browser automation with Java',
-      icon: <><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 12h8M12 8v8"/></> },
-    { name:'Postman API Certification', org:'Postman Academy', note:'API design, testing and automation',
-      icon: <><path d="M21 2H3v16h5v4l4-4h4l5-5V2z"/><line x1="7" y1="8" x2="17" y2="8"/><line x1="7" y1="12" x2="13" y2="12"/></> },
+  const list = [
+    { name:'ISTQB Foundation Level', org:'ISTQB — International', note:'Software testing theory and methodology', icon:<><circle cx="12" cy="8" r="4"/><path d="M12 14c-4 0-7 2-7 4v1h14v-1c0-2-3-4-7-4z"/></> },
+    { name:'Selenium WebDriver Certification', org:'Udemy / LinkedIn Learning', note:'Advanced browser automation with Java', icon:<><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 12h8M12 8v8"/></> },
+    { name:'Postman API Certification', org:'Postman Academy', note:'API design, testing and automation', icon:<><path d="M21 2H3v16h5v4l4-4h4l5-5V2z"/><line x1="7" y1="8" x2="17" y2="8"/><line x1="7" y1="12" x2="13" y2="12"/></> },
   ];
   return (
-    <section id="certs"><div className="wrap">
+    <section id="certs" style={{background:'var(--paper)'}}><div className="wrap">
       <div className="eyebrow">06 &mdash; Certifications</div>
-      <h2 className="sec-title"><TitleLine>Credentials &amp; <span className="it">Recognition.</span></TitleLine></h2>
+      <h2 className="sec-t"><TL>Credentials &amp; <span className="it">Recognition.</span></TL></h2>
       <p className="sec-lead">Formal validation of testing methodology, tooling expertise, and engineering fundamentals.</p>
-      <div className="certs-grid">
-        {certs.map((c, i) => {
-          const [ref, vis] = useReveal();
+      <div className="cgrid">
+        {list.map((c,i)=>{
+          const [ref,vis]=useReveal();
           return (
-            <div key={c.name} ref={ref} className={`cert reveal ${vis?'in':''} d${i}`} style={{ transitionDelay: i*0.1+'s' }}>
-              <div className="cert-badge">
-                <svg viewBox="0 0 24 24">{c.icon}</svg>
-              </div>
-              <div className="cert-name">{c.name}</div>
-              <div className="cert-org">{c.org}</div>
-              <div className="cert-note">{c.note}</div>
+            <div key={c.name} ref={ref} className={`cert reveal ${vis?'in':''}`} style={{transitionDelay:i*.1+'s'}}>
+              <div className="cbadge"><svg viewBox="0 0 24 24">{c.icon}</svg></div>
+              <div className="cname">{c.name}</div>
+              <div className="corg">{c.org}</div>
+              <div className="cnote">{c.note}</div>
             </div>
           );
         })}
@@ -872,46 +899,42 @@ function Certs() {
 
 /* ── CONTACT ── */
 function Contact() {
-  const [r1, v1] = useReveal(); const [r2, v2] = useReveal();
+  const [r1,v1]=useReveal(); const [r2,v2]=useReveal();
+  const links = [
+    { lbl:'LinkedIn', val:'linkedin.com/in/gunachanthiran-k-a89747246', href:LINKEDIN },
+    { lbl:'GitHub',   val:'github.com/Gunachanthiran', href:GITHUB },
+    { lbl:'Email',    val:EMAIL, href:'mailto:'+EMAIL },
+  ];
   return (
-    <section id="contact"><div className="wrap">
+    <section id="contact" style={{background:'var(--paper2)'}}><div className="wrap">
       <div className="eyebrow">07 &mdash; Contact</div>
-      <h2 className="sec-title"><TitleLine>Let&#8217;s <span className="it">Connect.</span></TitleLine></h2>
-      <div className="contact-grid">
+      <h2 className="sec-t"><TL>Let&#8217;s <span className="it">Connect.</span></TL></h2>
+      <div className="cgr">
         <div ref={r1} className={`reveal ${v1?'in':''}`}>
-          <p className="contact-hed">Open to the right role &mdash;<br/><em>wherever quality matters.</em></p>
-          <p className="contact-body">I am actively looking for <strong>QA Engineer, SDET, and Automation Engineer</strong> roles where precision, framework thinking, and developer-level engineering ability are valued. Open to full-time, contract, and remote positions.</p>
+          <p className="ched">Open to the right role &mdash;<br/><em>wherever quality matters.</em></p>
+          <p className="cbody">I am actively looking for <strong>QA Engineer, SDET, and Automation Engineer</strong> roles where precision, framework thinking, and developer-level engineering ability are valued. Open to full-time, contract, and remote positions.</p>
           <div>
-            {[
-              { lbl:'LinkedIn', val:'linkedin.com/in/gunachanthiran-k-a89747246', href: LINKEDIN },
-              { lbl:'GitHub',   val:'github.com/Gunachanthiran', href: GITHUB },
-              { lbl:'Email',    val: EMAIL, href: `mailto:${EMAIL}` },
-            ].map(item => (
-              <a key={item.lbl} className="c-item" href={item.href} target={item.href.startsWith('http') ? '_blank' : undefined} rel={item.href.startsWith('http') ? 'noopener' : undefined}>
-                <div className="c-left">
-                  <span className="c-lbl">{item.lbl}</span>
-                  <span className="c-val">{item.val}</span>
-                </div>
-                <span className="c-arr">&#8599;</span>
+            {links.map(l=>(
+              <a key={l.lbl} className="citem" href={l.href} target={l.href.startsWith('http')?'_blank':undefined} rel={l.href.startsWith('http')?'noopener':undefined}>
+                <div className="cleft"><span className="clbl">{l.lbl}</span><span className="cval">{l.val}</span></div>
+                <span className="carr">&#8599;</span>
               </a>
             ))}
           </div>
         </div>
-        <div ref={r2} className={`contact-right reveal d1 ${v2?'in':''}`}>
-          <div className="status-card">
-            <div className="status-top"><div className="sdot" /> Open to Work</div>
-            <div className="status-t">Roles I am targeting</div>
-            <div className="role-tags">
-              {['QA Engineer','SDET','Automation Engineer','QA Developer','Software Test Developer','Test Architect'].map(r => (
-                <span key={r} className="role-tag">{r}</span>
-              ))}
+        <div ref={r2} className={`cright reveal d1 ${v2?'in':''}`}>
+          <div className="scard">
+            <div className="stop"><div className="sdot"/>Open to Work</div>
+            <div className="st">Roles I am targeting</div>
+            <div className="rtags">
+              {['QA Engineer','SDET','Automation Engineer','QA Developer','Software Test Developer','Test Architect'].map(r=><span key={r} className="rtag">{r}</span>)}
             </div>
           </div>
-          <div className="pref-card">
-            <div className="pref-t">Preferences</div>
-            <div className="pref-list">
-              {['Remote, Hybrid, or On-site','Full-time or Contract','Product, SaaS, or Enterprise environments','Teams that treat QA as engineering','Agile / Scrum delivery environments'].map(p => (
-                <div key={p} className="pref-item"><span className="pref-ck">&#10003;</span>{p}</div>
+          <div className="pcard">
+            <div className="pt2">Preferences</div>
+            <div className="plist">
+              {['Remote, Hybrid, or On-site','Full-time or Contract','Product, SaaS, or Enterprise environments','Teams that treat QA as engineering','Agile / Scrum delivery environments'].map(p=>(
+                <div key={p} className="pitem"><span className="pck">&#10003;</span>{p}</div>
               ))}
             </div>
           </div>
@@ -923,58 +946,53 @@ function Contact() {
 
 /* ── APP ── */
 function App() {
-  const [activeSection, setActiveSection] = useState('hero');
-  const [mobileOpen, setMobileOpen] = useState(false);
-
-  // Active nav via scroll
+  const [active, setActive] = useState('hero');
+  const [mOpen, setMOpen] = useState(false);
   useEffect(() => {
-    const all = ['hero', ...NAV_ITEMS];
-    const onScroll = () => {
-      let cur = 'hero';
-      all.forEach(id => {
-        const el = document.getElementById(id);
-        if (el && el.getBoundingClientRect().top - 120 <= 0) cur = id;
-      });
-      setActiveSection(cur);
+    const all = ['hero',...SECTIONS];
+    const h = () => {
+      let cur='hero';
+      all.forEach(id => { const el=document.getElementById(id); if(el&&el.getBoundingClientRect().top-120<=0) cur=id; });
+      setActive(cur);
     };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    window.addEventListener('scroll', h, { passive:true });
+    return () => window.removeEventListener('scroll', h);
   }, []);
-
   return <>
-    <ProgressBar />
-    <Cursor />
-    <Nav active={activeSection} mobileOpen={mobileOpen} setMobile={setMobileOpen} />
+    <div className="grain"/>
+    <ProgressBar/>
+    <Cursor/>
+    <Nav active={active} mOpen={mOpen} setMOpen={setMOpen}/>
     <main>
-      <Hero />
-      <div className="divider" />
-      <About />
-      <div className="divider" />
-      <Skills />
-      <div className="divider" />
-      <Experience />
-      <div className="divider" />
-      <Projects />
-      <div className="divider" />
-      <Learning />
-      <div className="divider" />
-      <Certs />
-      <div className="divider" />
-      <Contact />
+      <Hero/>
+      <Marquee/>
+      <div className="hr"/>
+      <About/>
+      <div className="hr"/>
+      <Skills/>
+      <div className="hr"/>
+      <Experience/>
+      <div className="hr"/>
+      <Projects/>
+      <div className="hr"/>
+      <Learning/>
+      <div className="hr"/>
+      <Certs/>
+      <div className="hr"/>
+      <Contact/>
     </main>
     <footer>
-      <button className="foot-brand" onClick={() => scrollTo('hero')}>Guna<em>chanthiran</em></button>
-      <div className="foot-copy">&copy; {new Date().getFullYear()} &mdash; QA Engineer &amp; Automation Architect</div>
-      <nav className="foot-links">
-        <a className="foot-link" href={LINKEDIN} target="_blank" rel="noopener">LinkedIn</a>
-        <a className="foot-link" href={GITHUB}   target="_blank" rel="noopener">GitHub</a>
-        <a className="foot-link" href={`mailto:${EMAIL}`}>Email</a>
+      <button className="fbrand" onClick={()=>goTo('hero')}>Guna<em>chanthiran</em></button>
+      <div className="fcopy">&copy; {new Date().getFullYear()} &mdash; QA Engineer &amp; Automation Architect</div>
+      <nav className="fnav">
+        <a className="flink" href={LINKEDIN} target="_blank" rel="noopener">LinkedIn</a>
+        <a className="flink" href={GITHUB} target="_blank" rel="noopener">GitHub</a>
+        <a className="flink" href={'mailto:'+EMAIL}>Email</a>
       </nav>
     </footer>
   </>;
 }
-
-ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
 </script>
 </body>
 </html>
