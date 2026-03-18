@@ -3,928 +3,1241 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gunachanthiran — QA Engineer & Automation Architect</title>
-  <meta name="description" content="QA Engineer | SDET | Automation Engineer — Web, Mobile, Desktop & API Automation. Breaking software so users don't have to." />
+  <title>Gunachanthiran — QA Engineer &amp; Automation Architect</title>
+  <meta name="description" content="QA Engineer, SDET and Automation Architect specialising in Web, Mobile, Desktop and API test engineering. Based in India." />
+  <meta property="og:title" content="Gunachanthiran — QA Engineer & Automation Architect" />
+  <meta property="og:description" content="Breaking software before users do. SDET with enterprise automation experience at Schneider Electric." />
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
   <style>
-    /* ── RESET & TOKENS ─────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  /* ─────────────────────────────────────────────────────────
+     TOKENS
+  ───────────────────────────────────────────────────────── */
+  :root {
+    --ink:        #0A0A0C;
+    --ink-2:      #111115;
+    --ink-3:      #18181E;
+    --ink-4:      #222228;
+    --gold:       #C8A96E;
+    --gold-dim:   #8B7144;
+    --gold-pale:  rgba(200,169,110,0.08);
+    --cream:      #F0EDE6;
+    --cream-dim:  #A8A49C;
+    --cream-faint:#5C5A56;
+    --border:     rgba(200,169,110,0.12);
+    --border-h:   rgba(200,169,110,0.35);
+    --red-accent: #C0514A;
+    --serif:      'DM Serif Display', Georgia, serif;
+    --sans:       'Outfit', sans-serif;
+    --mono:       'JetBrains Mono', 'Courier New', monospace;
+    --ease:       cubic-bezier(0.16,1,0.3,1);
+    --r:          6px;
+  }
 
-    :root {
-      --bg:        #080c10;
-      --bg-card:   #0d1117;
-      --bg-glass:  rgba(13,17,23,0.85);
-      --border:    rgba(0,217,255,0.12);
-      --border-h:  rgba(0,217,255,0.4);
-      --cyan:      #00d9ff;
-      --cyan-dim:  #0090aa;
-      --green:     #00ff88;
-      --amber:     #ffb800;
-      --text:      #e6edf3;
-      --text-muted:#8b949e;
-      --text-dim:  #484f58;
-      --font-head: 'Syne', sans-serif;
-      --font-code: 'Space Mono', monospace;
-      --font-body: 'Inter', sans-serif;
-      --radius:    12px;
-      --glow:      0 0 40px rgba(0,217,255,0.15);
-    }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; font-size: 16px; }
 
-    html { scroll-behavior: smooth; }
+  body {
+    background: var(--ink);
+    color: var(--cream);
+    font-family: var(--sans);
+    font-weight: 400;
+    line-height: 1.75;
+    overflow-x: hidden;
+    cursor: none;
+  }
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font-body);
-      font-size: 16px;
-      line-height: 1.7;
-      overflow-x: hidden;
-    }
+  ::selection { background: rgba(200,169,110,0.2); color: var(--cream); }
 
-    ::selection { background: rgba(0,217,255,0.25); color: #fff; }
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: var(--ink); }
+  ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
 
-    /* ── SCROLLBAR ──────────────────────────────────────────── */
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--cyan-dim); border-radius: 2px; }
+  /* ─────────────────────────────────────────────────────────
+     CUSTOM CURSOR
+  ───────────────────────────────────────────────────────── */
+  #cursor {
+    position: fixed; z-index: 9999;
+    width: 8px; height: 8px;
+    background: var(--gold);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.3s var(--ease), height 0.3s var(--ease), opacity 0.3s;
+  }
+  #cursor-ring {
+    position: fixed; z-index: 9998;
+    width: 32px; height: 32px;
+    border: 1px solid rgba(200,169,110,0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    transition: transform 0.4s var(--ease), width 0.4s var(--ease), height 0.4s var(--ease), opacity 0.3s, border-color 0.3s;
+  }
+  body:has(a:hover) #cursor-ring,
+  body:has(button:hover) #cursor-ring {
+    width: 48px; height: 48px;
+    border-color: var(--gold);
+  }
 
-    /* ── NOISE OVERLAY ──────────────────────────────────────── */
-    body::before {
-      content: '';
-      position: fixed; inset: 0; z-index: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-      pointer-events: none;
-    }
+  /* ─────────────────────────────────────────────────────────
+     GRAIN TEXTURE
+  ───────────────────────────────────────────────────────── */
+  body::after {
+    content: '';
+    position: fixed; inset: 0; z-index: 9990;
+    pointer-events: none;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  }
 
-    /* ── GRID BACKGROUND ────────────────────────────────────── */
-    .grid-bg {
-      position: fixed; inset: 0; z-index: 0;
-      background-image:
-        linear-gradient(rgba(0,217,255,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,217,255,0.03) 1px, transparent 1px);
-      background-size: 60px 60px;
-      pointer-events: none;
-    }
+  /* ─────────────────────────────────────────────────────────
+     LAYOUT
+  ───────────────────────────────────────────────────────── */
+  .wrap    { max-width: 1200px; margin: 0 auto; padding: 0 6%; }
+  .wrap-sm { max-width: 900px;  margin: 0 auto; padding: 0 6%; }
+  section  { padding: 120px 0; }
 
-    /* ── NAV ────────────────────────────────────────────────── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 1.1rem 5%;
-      background: var(--bg-glass);
-      backdrop-filter: blur(20px);
+  /* ─────────────────────────────────────────────────────────
+     NAV
+  ───────────────────────────────────────────────────────── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.5rem 6%;
+    transition: padding 0.4s var(--ease), background 0.4s;
+  }
+  nav.scrolled {
+    padding: 1rem 6%;
+    background: rgba(10,10,12,0.92);
+    backdrop-filter: blur(24px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-mark {
+    font-family: var(--serif);
+    font-size: 1.05rem;
+    letter-spacing: 0.02em;
+    color: var(--cream);
+    text-decoration: none;
+  }
+  .nav-mark em { color: var(--gold); font-style: normal; }
+
+  .nav-list { list-style: none; display: flex; gap: 2.5rem; }
+  .nav-list a {
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cream-dim);
+    text-decoration: none;
+    position: relative;
+    transition: color 0.25s;
+  }
+  .nav-list a::after {
+    content: '';
+    position: absolute; bottom: -3px; left: 0; right: 0;
+    height: 1px; background: var(--gold);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s var(--ease);
+  }
+  .nav-list a:hover { color: var(--cream); }
+  .nav-list a:hover::after { transform: scaleX(1); }
+
+  .nav-cta {
+    font-size: 0.75rem; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--gold); text-decoration: none;
+    border: 1px solid var(--border-h);
+    padding: 0.5rem 1.25rem; border-radius: var(--r);
+    transition: all 0.25s;
+  }
+  .nav-cta:hover { background: var(--gold); color: var(--ink); }
+
+  .hamburger { display: none; background: none; border: none; cursor: none; color: var(--cream); font-size: 1.2rem; }
+
+  /* ─────────────────────────────────────────────────────────
+     HERO
+  ───────────────────────────────────────────────────────── */
+  #hero {
+    min-height: 100vh; display: flex; align-items: center;
+    position: relative; overflow: hidden;
+  }
+
+  .hero-bg-number {
+    position: absolute; right: -2%; top: 50%; transform: translateY(-50%);
+    font-family: var(--serif); font-size: clamp(18rem, 30vw, 28rem);
+    color: rgba(200,169,110,0.025); line-height: 1;
+    pointer-events: none; user-select: none;
+    letter-spacing: -0.05em;
+  }
+
+  .hero-line {
+    position: absolute; top: 0; bottom: 0; left: 6%;
+    width: 1px; background: linear-gradient(to bottom, transparent, var(--gold-dim) 30%, var(--gold-dim) 70%, transparent);
+    opacity: 0.25;
+  }
+
+  .hero-content { padding-top: 100px; position: relative; z-index: 1; }
+
+  .hero-eyebrow {
+    display: flex; align-items: center; gap: 1rem;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.8s var(--ease) forwards; opacity: 0;
+  }
+  .hero-eyebrow-line {
+    width: 48px; height: 1px; background: var(--gold);
+  }
+  .hero-eyebrow-text {
+    font-family: var(--mono); font-size: 0.72rem;
+    letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold);
+  }
+  .hero-dot {
+    width: 7px; height: 7px;
+    background: var(--gold); border-radius: 50%;
+    box-shadow: 0 0 10px var(--gold);
+    animation: blink 2.5s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .hero-name {
+    font-family: var(--serif);
+    font-size: clamp(3.5rem, 8vw, 7.5rem);
+    font-weight: 400;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 2rem;
+    animation: fadeUp 0.8s 0.15s var(--ease) forwards; opacity: 0;
+  }
+  .hero-name .italic { font-style: italic; color: var(--gold); }
+
+  .hero-roles {
+    display: flex; gap: 0; flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.8s 0.25s var(--ease) forwards; opacity: 0;
+  }
+  .hero-role-item {
+    font-size: 0.8rem; font-weight: 500;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--cream-dim);
+    padding-right: 1.5rem; margin-right: 1.5rem;
+    border-right: 1px solid rgba(200,169,110,0.25);
+    line-height: 1;
+  }
+  .hero-role-item:last-child { border-right: none; }
+
+  .hero-desc {
+    max-width: 560px;
+    font-size: 1.05rem; font-weight: 300;
+    color: var(--cream-dim); line-height: 1.8;
+    margin-bottom: 3rem;
+    animation: fadeUp 0.8s 0.35s var(--ease) forwards; opacity: 0;
+  }
+  .hero-desc strong { color: var(--cream); font-weight: 500; }
+
+  .hero-actions {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    animation: fadeUp 0.8s 0.45s var(--ease) forwards; opacity: 0;
+  }
+
+  .btn-primary {
+    display: inline-block; padding: 0.85rem 2.25rem;
+    background: var(--gold); color: var(--ink);
+    font-family: var(--sans); font-size: 0.78rem;
+    font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+    text-decoration: none; border-radius: var(--r);
+    transition: all 0.3s var(--ease);
+  }
+  .btn-primary:hover {
+    background: var(--cream); transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(200,169,110,0.25);
+  }
+  .btn-ghost {
+    display: inline-block; padding: 0.85rem 2.25rem;
+    border: 1px solid var(--border-h); color: var(--cream-dim);
+    font-family: var(--sans); font-size: 0.78rem;
+    font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+    text-decoration: none; border-radius: var(--r);
+    transition: all 0.3s var(--ease);
+  }
+  .btn-ghost:hover {
+    border-color: var(--gold); color: var(--gold);
+    transform: translateY(-2px);
+  }
+
+  .hero-metrics {
+    display: flex; gap: 0; margin-top: 5rem; padding-top: 3rem;
+    border-top: 1px solid var(--border);
+    animation: fadeUp 0.8s 0.55s var(--ease) forwards; opacity: 0;
+  }
+  .metric {
+    padding-right: 3.5rem; margin-right: 3.5rem;
+    border-right: 1px solid var(--border);
+  }
+  .metric:last-child { border-right: none; }
+  .metric-n {
+    font-family: var(--serif); font-size: 2.6rem;
+    color: var(--gold); line-height: 1;
+  }
+  .metric-l {
+    font-size: 0.72rem; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--cream-faint); margin-top: 6px;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     SECTION HEADING SYSTEM
+  ───────────────────────────────────────────────────────── */
+  .sec-index {
+    font-family: var(--mono); font-size: 0.7rem;
+    letter-spacing: 0.15em; color: var(--gold);
+    text-transform: uppercase; margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .sec-index::before {
+    content: ''; display: block;
+    width: 32px; height: 1px; background: var(--gold);
+  }
+
+  .sec-title {
+    font-family: var(--serif);
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    font-weight: 400; line-height: 1.1;
+    letter-spacing: -0.02em; margin-bottom: 1.25rem;
+  }
+  .sec-title .italic { font-style: italic; color: var(--gold); }
+
+  .sec-lead {
+    font-size: 1rem; font-weight: 300;
+    color: var(--cream-dim); max-width: 540px; line-height: 1.8;
+  }
+
+  .divider {
+    height: 1px; background: var(--border); margin: 0;
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     ABOUT
+  ───────────────────────────────────────────────────────── */
+  #about { background: var(--ink-2); }
+
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1.1fr;
+    gap: 6rem; align-items: start; margin-top: 5rem;
+  }
+
+  .about-body { font-size: 0.97rem; font-weight: 300; color: var(--cream-dim); }
+  .about-body p { margin-bottom: 1.5rem; line-height: 1.9; }
+  .about-body p strong { color: var(--cream); font-weight: 500; }
+  .about-body p .gold { color: var(--gold); }
+
+  .about-callout {
+    border-left: 2px solid var(--gold);
+    padding: 1rem 0 1rem 1.5rem;
+    margin: 2rem 0;
+    font-size: 1.05rem; font-style: italic;
+    font-family: var(--serif); color: var(--cream-dim);
+    line-height: 1.7;
+  }
+
+  .about-right { display: flex; flex-direction: column; gap: 1.5rem; }
+
+  .info-block {
+    background: var(--ink-3);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 1.75rem 2rem;
+    position: relative; overflow: hidden;
+  }
+  .info-block::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+  }
+  .info-block-label {
+    font-family: var(--mono); font-size: 0.65rem;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.1rem;
+  }
+  .info-pairs { display: flex; flex-direction: column; gap: 0.65rem; }
+  .info-pair {
+    display: flex; justify-content: space-between;
+    align-items: baseline; gap: 1rem;
+    padding-bottom: 0.65rem;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 0.86rem;
+  }
+  .info-pair:last-child { border-bottom: none; padding-bottom: 0; }
+  .info-pair-key { color: var(--cream-faint); font-weight: 400; white-space: nowrap; }
+  .info-pair-val { color: var(--cream); font-weight: 500; text-align: right; }
+
+  /* ─────────────────────────────────────────────────────────
+     SKILLS
+  ───────────────────────────────────────────────────────── */
+  #skills { background: var(--ink); }
+
+  .skills-layout {
+    display: grid; grid-template-columns: 260px 1fr;
+    gap: 4rem; margin-top: 5rem; align-items: start;
+  }
+
+  .skills-nav { position: sticky; top: 120px; }
+  .skills-nav-item {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.82rem; font-weight: 500;
+    letter-spacing: 0.05em;
+    color: var(--cream-faint); cursor: none;
+    transition: color 0.2s;
+  }
+  .skills-nav-item:hover, .skills-nav-item.active { color: var(--gold); }
+  .skills-nav-item .nav-num {
+    font-family: var(--mono); font-size: 0.65rem; color: var(--gold-dim);
+  }
+  .skills-nav-item.active .nav-num { color: var(--gold); }
+
+  .skills-groups { display: flex; flex-direction: column; gap: 3.5rem; }
+
+  .skill-group { }
+  .skill-group-title {
+    font-family: var(--mono); font-size: 0.68rem;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.75rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .skill-group-title::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+
+  .skill-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 7px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 6px 14px;
+    font-size: 0.78rem; font-weight: 500;
+    color: var(--cream-dim);
+    background: var(--ink-3);
+    transition: all 0.25s var(--ease);
+    letter-spacing: 0.02em;
+  }
+  .pill:hover {
+    border-color: var(--border-h);
+    color: var(--cream);
+    background: var(--gold-pale);
+    transform: translateY(-1px);
+  }
+  .pill-dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--gold); flex-shrink: 0;
+    opacity: 0.6;
+  }
+  .pill-dot.green { background: #6A9F6E; }
+  .pill-dot.amber { background: var(--gold); }
+  .pill-dot.red   { background: var(--red-accent); }
+
+  /* ─────────────────────────────────────────────────────────
+     EXPERIENCE
+  ───────────────────────────────────────────────────────── */
+  #experience { background: var(--ink-2); }
+
+  .exp-entries { margin-top: 5rem; display: flex; flex-direction: column; gap: 0; }
+
+  .exp-item {
+    display: grid; grid-template-columns: 220px 1fr;
+    gap: 3rem; padding: 3.5rem 0;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .exp-item:first-child { border-top: 1px solid var(--border); }
+
+  .exp-left { }
+  .exp-company {
+    font-family: var(--serif); font-size: 1.4rem;
+    font-weight: 400; line-height: 1.2;
+    margin-bottom: 0.5rem; color: var(--cream);
+  }
+  .exp-period {
+    font-family: var(--mono); font-size: 0.68rem;
+    letter-spacing: 0.12em; color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+  .exp-type {
+    font-size: 0.75rem; color: var(--cream-faint);
+  }
+
+  .exp-right { }
+  .exp-role {
+    font-size: 1.05rem; font-weight: 600;
+    color: var(--cream); margin-bottom: 0.75rem;
+  }
+  .exp-summary {
+    font-size: 0.91rem; font-weight: 300;
+    color: var(--cream-dim); line-height: 1.85;
+    margin-bottom: 1.75rem;
+  }
+  .exp-points {
+    list-style: none; display: flex; flex-direction: column; gap: 0.7rem;
+    margin-bottom: 2rem;
+  }
+  .exp-points li {
+    display: grid; grid-template-columns: 16px 1fr;
+    gap: 0.75rem; font-size: 0.88rem;
+    color: var(--cream-dim); line-height: 1.7;
+  }
+  .exp-points li::before {
+    content: ''; display: block;
+    width: 5px; height: 1px; background: var(--gold);
+    margin-top: 12px;
+  }
+  .exp-points li strong { color: var(--cream); font-weight: 500; }
+  .exp-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .exp-tag {
+    font-family: var(--mono); font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    color: var(--gold-dim); background: var(--gold-pale);
+    border: 1px solid rgba(200,169,110,0.15);
+    padding: 3px 10px; border-radius: 3px;
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     PROJECTS
+  ───────────────────────────────────────────────────────── */
+  #projects { background: var(--ink); }
+
+  .projects-list { margin-top: 5rem; }
+
+  .project-row {
+    display: grid; grid-template-columns: 1fr 1.6fr auto;
+    gap: 2.5rem; align-items: center;
+    padding: 2.5rem 0; border-bottom: 1px solid var(--border);
+    transition: background 0.3s;
+    position: relative;
+  }
+  .project-row:first-child { border-top: 1px solid var(--border); }
+  .project-row::before {
+    content: '';
+    position: absolute; left: -6%; right: -6%; top: 0; bottom: 0;
+    background: var(--gold-pale);
+    opacity: 0; border-radius: var(--r);
+    transition: opacity 0.35s var(--ease);
+    pointer-events: none;
+  }
+  .project-row:hover::before { opacity: 1; }
+
+  .project-num {
+    font-family: var(--mono); font-size: 0.65rem;
+    letter-spacing: 0.12em; color: var(--gold-dim);
+    margin-bottom: 0.5rem;
+  }
+  .project-name {
+    font-family: var(--serif); font-size: 1.35rem;
+    font-weight: 400; color: var(--cream); line-height: 1.2;
+    margin-bottom: 0.4rem;
+  }
+  .project-domain {
+    font-size: 0.75rem; color: var(--cream-faint);
+    letter-spacing: 0.06em;
+  }
+
+  .project-desc-col {
+    font-size: 0.875rem; font-weight: 300;
+    color: var(--cream-dim); line-height: 1.85;
+  }
+  .project-desc-col strong { color: var(--cream); font-weight: 500; }
+
+  .project-meta { display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end; }
+  .project-link-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: 0.68rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--gold); text-decoration: none;
+    border: 1px solid var(--border-h);
+    padding: 7px 16px; border-radius: var(--r);
+    transition: all 0.25s; white-space: nowrap;
+  }
+  .project-link-btn:hover { background: var(--gold); color: var(--ink); }
+  .project-link-btn svg { width: 10px; height: 10px; }
+
+  .project-stack-row { display: flex; flex-wrap: wrap; gap: 5px; justify-content: flex-end; }
+  .proj-tag {
+    font-family: var(--mono); font-size: 0.63rem;
+    letter-spacing: 0.06em;
+    color: var(--cream-faint);
+    padding: 2px 8px; border-radius: 2px;
+    background: var(--ink-3); border: 1px solid var(--border);
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     CURRENTLY LEARNING
+  ───────────────────────────────────────────────────────── */
+  #learning { background: var(--ink-2); }
+
+  .learning-grid {
+    display: grid; grid-template-columns: repeat(3,1fr);
+    gap: 1.5rem; margin-top: 4rem;
+  }
+
+  .learn-card {
+    background: var(--ink-3); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 2rem;
+    transition: all 0.35s var(--ease);
+    position: relative; overflow: hidden;
+  }
+  .learn-card::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, var(--gold-pale), transparent);
+    opacity: 0; transition: opacity 0.35s;
+  }
+  .learn-card:hover { border-color: var(--border-h); transform: translateY(-4px); }
+  .learn-card:hover::after { opacity: 1; }
+  .learn-card-num {
+    font-family: var(--mono); font-size: 0.62rem;
+    letter-spacing: 0.15em; color: var(--gold-dim);
+    margin-bottom: 1.25rem;
+  }
+  .learn-card-title {
+    font-family: var(--serif); font-size: 1.1rem;
+    font-weight: 400; color: var(--cream);
+    margin-bottom: 0.75rem; line-height: 1.3;
+  }
+  .learn-card-body {
+    font-size: 0.83rem; font-weight: 300;
+    color: var(--cream-dim); line-height: 1.8;
+    position: relative; z-index: 1;
+  }
+  .learn-progress {
+    margin-top: 1.5rem;
+    height: 2px; background: var(--ink-4);
+    border-radius: 1px; position: relative; z-index: 1;
+  }
+  .learn-progress-fill {
+    height: 100%; background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+    border-radius: 1px;
+    transition: width 1.5s var(--ease);
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     CERTIFICATIONS
+  ───────────────────────────────────────────────────────── */
+  #certifications { background: var(--ink); }
+
+  .certs-grid {
+    display: grid; grid-template-columns: repeat(3,1fr);
+    gap: 1.5rem; margin-top: 4rem;
+  }
+
+  .cert-card {
+    background: var(--ink-3); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 1.75rem;
+    transition: all 0.3s var(--ease);
+  }
+  .cert-card:hover { border-color: var(--border-h); transform: translateY(-3px); }
+  .cert-icon {
+    width: 38px; height: 38px; border-radius: 8px;
+    background: var(--gold-pale); border: 1px solid var(--border-h);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1.25rem;
+  }
+  .cert-icon svg { width: 18px; height: 18px; stroke: var(--gold); fill: none; stroke-width: 1.5; }
+  .cert-name { font-size: 0.9rem; font-weight: 600; color: var(--cream); margin-bottom: 0.35rem; }
+  .cert-issuer { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.08em; color: var(--gold-dim); }
+  .cert-note { font-size: 0.78rem; color: var(--cream-faint); margin-top: 0.5rem; }
+
+  /* ─────────────────────────────────────────────────────────
+     CONTACT
+  ───────────────────────────────────────────────────────── */
+  #contact { background: var(--ink-2); }
+
+  .contact-layout {
+    display: grid; grid-template-columns: 1.1fr 1fr;
+    gap: 6rem; margin-top: 5rem; align-items: start;
+  }
+
+  .contact-left { }
+  .contact-tagline {
+    font-family: var(--serif); font-size: 2rem;
+    font-weight: 400; line-height: 1.3; color: var(--cream);
+    margin-bottom: 1.5rem;
+  }
+  .contact-tagline em { font-style: italic; color: var(--gold); }
+  .contact-body {
+    font-size: 0.9rem; font-weight: 300;
+    color: var(--cream-dim); line-height: 1.85;
+    margin-bottom: 2.5rem; max-width: 420px;
+  }
+  .contact-body strong { color: var(--cream); font-weight: 500; }
+
+  .contact-links { display: flex; flex-direction: column; gap: 1px; }
+  .c-link {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.1rem 0; border-bottom: 1px solid var(--border);
+    text-decoration: none; color: var(--cream-dim);
+    transition: all 0.25s var(--ease); group: true;
+  }
+  .c-link:first-child { border-top: 1px solid var(--border); }
+  .c-link:hover { color: var(--cream); padding-left: 8px; }
+  .c-link:hover .c-arrow { transform: translate(4px, -4px); opacity: 1; }
+  .c-link-left { display: flex; align-items: center; gap: 1.25rem; }
+  .c-label { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); width: 72px; }
+  .c-value { font-size: 0.88rem; font-weight: 400; }
+  .c-arrow { opacity: 0.4; transition: all 0.25s; font-size: 0.75rem; color: var(--gold); }
+
+  .contact-right { }
+  .availability-card {
+    background: var(--ink-3); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 2.5rem; margin-bottom: 1.5rem;
+    position: relative; overflow: hidden;
+  }
+  .availability-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+  }
+  .avail-status {
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--mono); font-size: 0.7rem;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: #6A9F6E; margin-bottom: 1.25rem;
+  }
+  .avail-dot {
+    width: 7px; height: 7px; background: #6A9F6E;
+    border-radius: 50%; box-shadow: 0 0 8px #6A9F6E;
+    animation: blink 2.5s ease-in-out infinite;
+  }
+  .avail-title { font-family: var(--serif); font-size: 1.3rem; color: var(--cream); margin-bottom: 1.25rem; }
+  .avail-roles { display: flex; flex-wrap: wrap; gap: 8px; }
+  .avail-role {
+    font-size: 0.75rem; font-weight: 500;
+    color: var(--cream-dim); background: var(--ink-4);
+    border: 1px solid var(--border); border-radius: 3px;
+    padding: 5px 12px; letter-spacing: 0.03em;
+  }
+
+  .prefer-card {
+    background: var(--ink-3); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 2rem;
+  }
+  .prefer-title { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.25rem; }
+  .prefer-items { display: flex; flex-direction: column; gap: 0.6rem; }
+  .prefer-item {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 0.83rem; color: var(--cream-dim);
+  }
+  .prefer-check { color: var(--gold); font-size: 0.7rem; }
+
+  /* ─────────────────────────────────────────────────────────
+     FOOTER
+  ───────────────────────────────────────────────────────── */
+  footer {
+    background: var(--ink);
+    border-top: 1px solid var(--border);
+    padding: 3rem 6%;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem;
+    position: relative; z-index: 1;
+  }
+  .footer-brand { font-family: var(--serif); font-size: 1rem; color: var(--cream); }
+  .footer-brand em { color: var(--gold); font-style: normal; }
+  .footer-copy {
+    font-family: var(--mono); font-size: 0.65rem;
+    letter-spacing: 0.1em; color: var(--cream-faint);
+  }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a {
+    font-family: var(--mono); font-size: 0.65rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--cream-faint); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--gold); }
+
+  /* ─────────────────────────────────────────────────────────
+     SCROLL REVEAL
+  ───────────────────────────────────────────────────────── */
+  .reveal {
+    opacity: 0; transform: translateY(32px);
+    transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ─────────────────────────────────────────────────────────
+     MOBILE
+  ───────────────────────────────────────────────────────── */
+  @media (max-width: 900px) {
+    .nav-list, .nav-cta { display: none; }
+    .hamburger { display: block; }
+    .nav-list.open {
+      display: flex; flex-direction: column; gap: 0;
+      position: absolute; top: 100%; left: 0; right: 0;
+      background: rgba(10,10,12,0.97); backdrop-filter: blur(24px);
       border-bottom: 1px solid var(--border);
-      transition: all 0.3s ease;
+      padding: 0 6%;
     }
-
-    .nav-logo {
-      font-family: var(--font-code);
-      font-size: 1rem;
-      color: var(--cyan);
-      text-decoration: none;
-      letter-spacing: 0.05em;
-    }
-    .nav-logo span { color: var(--text-muted); }
-
-    .nav-links {
-      display: flex; gap: 2rem; list-style: none;
-    }
-    .nav-links a {
-      color: var(--text-muted);
-      text-decoration: none;
+    .nav-list.open li a {
+      display: block; padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
       font-size: 0.85rem;
-      font-family: var(--font-code);
-      letter-spacing: 0.04em;
-      transition: color 0.2s;
     }
-    .nav-links a:hover { color: var(--cyan); }
-
-    /* ── CONTAINER ──────────────────────────────────────────── */
-    .container { max-width: 1140px; margin: 0 auto; padding: 0 5%; position: relative; z-index: 1; }
-
-    section { padding: 100px 0; }
-
-    /* ── HERO ───────────────────────────────────────────────── */
-    #hero {
-      min-height: 100vh;
-      display: flex; align-items: center;
-      position: relative; overflow: hidden;
-    }
-
-    .hero-glow {
-      position: absolute; top: 20%; left: 50%;
-      transform: translateX(-50%);
-      width: 600px; height: 600px;
-      background: radial-gradient(circle, rgba(0,217,255,0.06) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .hero-inner {
-      padding-top: 100px;
-      max-width: 780px;
-    }
-
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(0,217,255,0.08);
-      border: 1px solid var(--border-h);
-      border-radius: 100px;
-      padding: 6px 16px;
-      font-family: var(--font-code);
-      font-size: 0.75rem;
-      color: var(--cyan);
-      letter-spacing: 0.08em;
-      margin-bottom: 2rem;
-      animation: fadeUp 0.6s ease forwards;
-    }
-    .hero-badge::before {
-      content: '';
-      width: 8px; height: 8px;
-      background: var(--green);
-      border-radius: 50%;
-      box-shadow: 0 0 8px var(--green);
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-
-    .hero-name {
-      font-family: var(--font-head);
-      font-size: clamp(2.8rem, 6vw, 5rem);
-      font-weight: 800;
-      line-height: 1.05;
-      letter-spacing: -0.02em;
-      margin-bottom: 0.5rem;
-      animation: fadeUp 0.7s 0.1s ease forwards; opacity: 0;
-    }
-    .hero-name .accent { color: var(--cyan); }
-
-    .hero-title {
-      font-family: var(--font-code);
-      font-size: clamp(1rem, 2vw, 1.25rem);
-      color: var(--text-muted);
-      margin-bottom: 1.5rem;
-      animation: fadeUp 0.7s 0.2s ease forwards; opacity: 0;
-    }
-    .hero-title .separator { color: var(--cyan); margin: 0 0.5rem; }
-
-    .hero-tagline {
-      font-size: 1.1rem;
-      color: var(--text);
-      max-width: 520px;
-      margin-bottom: 2.5rem;
-      animation: fadeUp 0.7s 0.3s ease forwards; opacity: 0;
-    }
-
-    .hero-cta {
-      display: flex; gap: 1rem; flex-wrap: wrap;
-      animation: fadeUp 0.7s 0.4s ease forwards; opacity: 0;
-    }
-
-    .btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 0.75rem 1.75rem;
-      border-radius: 8px;
-      font-family: var(--font-code);
-      font-size: 0.85rem;
-      text-decoration: none;
-      transition: all 0.25s ease;
-      cursor: pointer; border: none;
-    }
-    .btn-primary {
-      background: var(--cyan);
-      color: #000;
-      font-weight: 700;
-    }
-    .btn-primary:hover {
-      background: #fff;
-      box-shadow: 0 0 30px rgba(0,217,255,0.4);
-      transform: translateY(-2px);
-    }
-    .btn-outline {
-      background: transparent;
-      color: var(--cyan);
-      border: 1px solid var(--border-h);
-    }
-    .btn-outline:hover {
-      background: rgba(0,217,255,0.08);
-      border-color: var(--cyan);
-      transform: translateY(-2px);
-    }
-
-    .hero-stats {
-      display: flex; gap: 3rem; margin-top: 3.5rem;
-      padding-top: 2.5rem;
-      border-top: 1px solid var(--border);
-      animation: fadeUp 0.7s 0.5s ease forwards; opacity: 0;
-    }
-    .stat-num {
-      font-family: var(--font-head);
-      font-size: 2rem;
-      font-weight: 800;
-      color: var(--cyan);
-      line-height: 1;
-    }
-    .stat-label {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      font-family: var(--font-code);
-      letter-spacing: 0.05em;
-      margin-top: 4px;
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ── SECTION HEADER ─────────────────────────────────────── */
-    .section-label {
-      font-family: var(--font-code);
-      font-size: 0.75rem;
-      color: var(--cyan);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      margin-bottom: 0.75rem;
-    }
-    .section-title {
-      font-family: var(--font-head);
-      font-size: clamp(2rem, 4vw, 2.8rem);
-      font-weight: 800;
-      line-height: 1.1;
-      margin-bottom: 1rem;
-    }
-    .section-title .accent { color: var(--cyan); }
-    .section-desc {
-      color: var(--text-muted);
-      max-width: 520px;
-      margin-bottom: 3.5rem;
-    }
-
-    /* ── ABOUT ──────────────────────────────────────────────── */
-    #about .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    .about-text p {
-      color: var(--text-muted);
-      margin-bottom: 1.25rem;
-      font-size: 1rem;
-    }
-    .about-text p strong { color: var(--text); }
-
-    .about-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 2rem;
-      font-family: var(--font-code);
-      font-size: 0.82rem;
-      line-height: 1.9;
-      position: relative;
-      overflow: hidden;
-    }
-    .about-card::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--cyan), var(--green), transparent);
-    }
-    .code-comment { color: #6a9955; }
-    .code-key   { color: #9cdcfe; }
-    .code-val   { color: #ce9178; }
-    .code-cyan  { color: var(--cyan); }
-    .code-green { color: var(--green); }
-    .code-num   { color: #b5cea8; }
-
-    /* ── SKILLS ─────────────────────────────────────────────── */
-    #skills { background: rgba(13,17,23,0.5); }
-
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .skill-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.75rem;
-      transition: all 0.3s ease;
-      position: relative; overflow: hidden;
-    }
-    .skill-card:hover {
-      border-color: var(--border-h);
-      box-shadow: var(--glow);
-      transform: translateY(-4px);
-    }
-    .skill-card-icon {
-      font-size: 1.75rem;
-      margin-bottom: 1rem;
-    }
-    .skill-card-title {
-      font-family: var(--font-head);
-      font-size: 1.05rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-      color: var(--text);
-    }
-    .skill-tags {
-      display: flex; flex-wrap: wrap; gap: 6px;
-    }
-    .tag {
-      background: rgba(0,217,255,0.06);
-      border: 1px solid rgba(0,217,255,0.15);
-      border-radius: 6px;
-      padding: 3px 10px;
-      font-family: var(--font-code);
-      font-size: 0.72rem;
-      color: var(--cyan);
-    }
-    .tag.green {
-      background: rgba(0,255,136,0.06);
-      border-color: rgba(0,255,136,0.15);
-      color: var(--green);
-    }
-    .tag.amber {
-      background: rgba(255,184,0,0.06);
-      border-color: rgba(255,184,0,0.15);
-      color: var(--amber);
-    }
-
-    /* ── EXPERIENCE ─────────────────────────────────────────── */
-    .timeline { position: relative; padding-left: 2rem; }
-    .timeline::before {
-      content: '';
-      position: absolute; left: 0; top: 8px; bottom: 0;
-      width: 1px;
-      background: linear-gradient(to bottom, var(--cyan), transparent);
-    }
-
-    .timeline-item {
-      position: relative;
-      margin-bottom: 3.5rem;
-      padding-left: 2rem;
-    }
-    .timeline-item::before {
-      content: '';
-      position: absolute; left: -2rem;
-      top: 8px;
-      width: 10px; height: 10px;
-      background: var(--cyan);
-      border-radius: 50%;
-      box-shadow: 0 0 12px var(--cyan);
-    }
-
-    .tl-meta {
-      display: flex; align-items: center; gap: 1rem;
-      flex-wrap: wrap;
-      margin-bottom: 0.75rem;
-    }
-    .tl-company {
-      font-family: var(--font-head);
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--text);
-    }
-    .tl-role {
-      font-family: var(--font-code);
-      font-size: 0.8rem;
-      color: var(--cyan);
-      background: rgba(0,217,255,0.08);
-      border: 1px solid var(--border);
-      border-radius: 100px;
-      padding: 3px 12px;
-    }
-    .tl-date {
-      font-family: var(--font-code);
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      margin-left: auto;
-    }
-
-    .tl-desc {
-      color: var(--text-muted);
-      margin-bottom: 1rem;
-      font-size: 0.95rem;
-    }
-
-    .tl-points {
-      list-style: none;
-      display: flex; flex-direction: column; gap: 0.5rem;
-    }
-    .tl-points li {
-      display: flex; align-items: flex-start; gap: 10px;
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
-    .tl-points li::before {
-      content: '▸';
-      color: var(--cyan);
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-
-    /* ── PROJECTS ───────────────────────────────────────────── */
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .project-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.75rem;
-      transition: all 0.3s ease;
-      display: flex; flex-direction: column;
-      position: relative; overflow: hidden;
-      cursor: default;
-    }
-    .project-card::after {
-      content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(0,217,255,0.03), transparent);
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    .project-card:hover {
-      border-color: var(--border-h);
-      box-shadow: var(--glow);
-      transform: translateY(-4px);
-    }
-    .project-card:hover::after { opacity: 1; }
-
-    .project-top {
-      display: flex; justify-content: space-between; align-items: flex-start;
-      margin-bottom: 1rem;
-    }
-    .project-icon { font-size: 1.75rem; }
-    .project-links { display: flex; gap: 8px; }
-    .project-link {
-      display: flex; align-items: center; justify-content: center;
-      width: 32px; height: 32px;
-      border-radius: 8px;
-      background: rgba(0,217,255,0.06);
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 0.85rem;
-      transition: all 0.2s;
-    }
-    .project-link:hover {
-      border-color: var(--cyan);
-      color: var(--cyan);
-    }
-
-    .project-name {
-      font-family: var(--font-head);
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 0.6rem;
-    }
-    .project-desc {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      flex: 1;
-      margin-bottom: 1.25rem;
-    }
-    .project-stack {
-      display: flex; flex-wrap: wrap; gap: 6px;
-    }
-
-    /* ── CONTACT ────────────────────────────────────────────── */
-    #contact { background: rgba(13,17,23,0.5); }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: start;
-    }
-
-    .contact-links { display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem; }
-    .contact-item {
-      display: flex; align-items: center; gap: 1rem;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1rem 1.25rem;
-      text-decoration: none;
-      color: var(--text);
-      transition: all 0.25s;
-    }
-    .contact-item:hover {
-      border-color: var(--border-h);
-      transform: translateX(6px);
-      box-shadow: var(--glow);
-    }
-    .contact-item-icon {
-      width: 40px; height: 40px;
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.1rem;
-      flex-shrink: 0;
-    }
-    .ci-blue  { background: rgba(10,102,194,0.15); border: 1px solid rgba(10,102,194,0.3); }
-    .ci-cyan  { background: rgba(0,217,255,0.08); border: 1px solid var(--border); }
-    .ci-red   { background: rgba(234,67,53,0.1);  border: 1px solid rgba(234,67,53,0.2); }
-    .contact-item-text span { display: block; }
-    .contact-item-text .ci-label { font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-code); }
-    .contact-item-text .ci-value { font-size: 0.9rem; color: var(--text); font-weight: 500; }
-
-    .open-to {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 2rem;
-      position: relative; overflow: hidden;
-    }
-    .open-to::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, var(--green), var(--cyan), transparent);
-    }
-    .open-to h3 {
-      font-family: var(--font-head);
-      font-size: 1.2rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-    }
-    .open-to-tag {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(0,255,136,0.06);
-      border: 1px solid rgba(0,255,136,0.2);
-      border-radius: 6px;
-      padding: 4px 12px;
-      font-family: var(--font-code);
-      font-size: 0.78rem;
-      color: var(--green);
-      margin: 4px;
-    }
-    .open-to-tag::before {
-      content: '✓';
-      font-size: 0.7rem;
-    }
-
-    /* ── FOOTER ─────────────────────────────────────────────── */
-    footer {
-      text-align: center;
-      padding: 2.5rem;
-      border-top: 1px solid var(--border);
-      font-family: var(--font-code);
-      font-size: 0.78rem;
-      color: var(--text-dim);
-      position: relative; z-index: 1;
-    }
-    footer span { color: var(--cyan); }
-
-    /* ── MOBILE ─────────────────────────────────────────────── */
-    .hamburger {
-      display: none;
-      background: none; border: none; cursor: pointer;
-      color: var(--text); font-size: 1.25rem;
-    }
-
-    @media (max-width: 768px) {
-      .nav-links { display: none; }
-      .hamburger { display: block; }
-      .nav-links.open {
-        display: flex; flex-direction: column;
-        position: absolute; top: 100%; left: 0; right: 0;
-        background: var(--bg-glass); backdrop-filter: blur(20px);
-        border-bottom: 1px solid var(--border);
-        padding: 1.5rem 5%;
-        gap: 1.25rem;
-      }
-      #about .about-grid { grid-template-columns: 1fr; gap: 2rem; }
-      .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
-      .hero-stats { gap: 1.5rem; flex-wrap: wrap; }
-    }
+    .about-grid     { grid-template-columns: 1fr; gap: 3rem; }
+    .skills-layout  { grid-template-columns: 1fr; }
+    .skills-nav     { display: none; }
+    .exp-item       { grid-template-columns: 1fr; gap: 0.75rem; }
+    .project-row    { grid-template-columns: 1fr; gap: 1rem; }
+    .project-meta   { align-items: flex-start; }
+    .project-stack-row { justify-content: flex-start; }
+    .learning-grid, .certs-grid { grid-template-columns: 1fr; }
+    .contact-layout { grid-template-columns: 1fr; gap: 3rem; }
+    .hero-metrics   { gap: 0; flex-wrap: wrap; }
+    .metric         { padding-right: 2rem; margin-right: 2rem; margin-bottom: 1.5rem; }
+    #cursor, #cursor-ring { display: none; }
+    body { cursor: auto; }
+    .hero-bg-number { display: none; }
+  }
   </style>
 </head>
 <body>
 
-<div class="grid-bg"></div>
+<!-- Custom Cursor -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
 
 <!-- ── NAV ── -->
 <nav id="navbar">
-  <a href="#hero" class="nav-logo">guna<span>_</span>chanthiran</a>
+  <a href="#hero" class="nav-mark">Guna<em>chanthiran</em></a>
   <ul class="nav-links" id="navlinks">
     <li><a href="#about">About</a></li>
     <li><a href="#skills">Skills</a></li>
     <li><a href="#experience">Experience</a></li>
     <li><a href="#projects">Projects</a></li>
+    <li><a href="#learning">Learning</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
-  <button class="hamburger" onclick="document.getElementById('navlinks').classList.toggle('open')">☰</button>
+  <a href="mailto:gunachanthiran@email.com" class="nav-cta">Hire Me</a>
+  <button class="hamburger" id="hamburger">&#9776;</button>
 </nav>
 
 <!-- ── HERO ── -->
 <section id="hero">
-  <div class="container">
-    <div class="hero-inner">
-      <div class="hero-badge">Available for opportunities</div>
+  <div class="hero-line"></div>
+  <div class="hero-bg-number">QA</div>
+  <div class="wrap">
+    <div class="hero-content">
+
+      <div class="hero-eyebrow">
+        <div class="hero-eyebrow-line"></div>
+        <span class="hero-eyebrow-text">Available for Opportunities</span>
+        <div class="hero-dot"></div>
+      </div>
 
       <h1 class="hero-name">
-        Gunachan<span class="accent">thiran</span>
+        Guna<span class="italic">chanthiran</span>
       </h1>
 
-      <p class="hero-title">
-        QA Engineer<span class="separator">·</span>SDET<span class="separator">·</span>Automation Architect<span class="separator">·</span>QA Developer
-      </p>
-
-      <p class="hero-tagline">
-        I build the safety nets that catch bugs before your users do.<br/>
-        <strong style="color:var(--cyan)">"Breaking software so users don't have to 🐛"</strong>
-      </p>
-
-      <div class="hero-cta">
-        <a href="#projects" class="btn btn-primary">View Projects →</a>
-        <a href="#contact" class="btn btn-outline">Get in Touch</a>
-        <a href="https://linkedin.com/in/gunachanthiran" class="btn btn-outline">LinkedIn ↗</a>
+      <div class="hero-roles">
+        <span class="hero-role-item">QA Engineer</span>
+        <span class="hero-role-item">SDET</span>
+        <span class="hero-role-item">Automation Architect</span>
+        <span class="hero-role-item">QA Developer</span>
       </div>
 
-      <div class="hero-stats">
-        <div>
-          <div class="stat-num">4+</div>
-          <div class="stat-label">Automation Domains</div>
+      <p class="hero-desc">
+        I build the safety nets that catch defects before your users ever encounter them.
+        With enterprise experience at <strong>Schneider Electric</strong> and automation
+        spanning <strong>web, mobile, desktop, and API</strong> surfaces — I treat quality
+        engineering as a discipline, not an afterthought.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#projects" class="btn-primary">View My Work</a>
+        <a href="#contact" class="btn-ghost">Get in Touch</a>
+        <a href="https://github.com/gunachanthiran" class="btn-ghost" target="_blank">GitHub &#8599;</a>
+      </div>
+
+      <div class="hero-metrics">
+        <div class="metric">
+          <div class="metric-n">4</div>
+          <div class="metric-l">Automation Domains</div>
         </div>
-        <div>
-          <div class="stat-num">10+</div>
-          <div class="stat-label">Tools & Frameworks</div>
+        <div class="metric">
+          <div class="metric-n">10+</div>
+          <div class="metric-l">Tools &amp; Frameworks</div>
         </div>
-        <div>
-          <div class="stat-num">1–3</div>
-          <div class="stat-label">Yrs Experience</div>
+        <div class="metric">
+          <div class="metric-n">5+</div>
+          <div class="metric-l">Real Projects</div>
         </div>
-        <div>
-          <div class="stat-num">5+</div>
-          <div class="stat-label">Real Projects</div>
+        <div class="metric">
+          <div class="metric-n">1&#8211;3</div>
+          <div class="metric-l">Years Experience</div>
         </div>
       </div>
+
     </div>
   </div>
-  <div class="hero-glow"></div>
 </section>
+
+<div class="divider"></div>
 
 <!-- ── ABOUT ── -->
 <section id="about">
-  <div class="container">
+  <div class="wrap">
+    <div class="sec-index">01 &mdash; About</div>
+    <h2 class="sec-title">Quality is my <span class="italic">discipline.</span></h2>
+    <p class="sec-lead">More than test execution — I design automation systems that scale, fail gracefully, and report with clarity.</p>
+
     <div class="about-grid">
-      <div class="about-text">
-        <div class="section-label">// about.md</div>
-        <h2 class="section-title">Quality<br/>is my <span class="accent">craft.</span></h2>
+      <div class="about-body reveal">
         <p>
-          I'm a <strong>QA Engineer & Automation Developer</strong> who sits at the intersection of software testing and engineering — not just running test cases, but <strong>designing test architectures</strong> from the ground up.
+          I am a <strong>QA Engineer and Automation Developer</strong> who operates at the crossover between quality assurance and software engineering. My work is not confined to writing test scripts — it extends to designing <span class="gold">framework architecture</span>, building reusable automation infrastructure, and developing Python tooling that eliminates manual overhead across entire teams.
         </p>
         <p>
-          My work at <strong>Schneider Electric</strong> involved automating complex enterprise desktop applications — think WPF interfaces, industrial topology exports, and large-scale regression validation for real engineering software used by professionals worldwide.
+          At <strong>Schneider Electric</strong>, I work on industrial-grade desktop software used by electrical engineers worldwide. This environment demands precision: automating <strong>WPF applications</strong> with non-standard controls, mapping complex object trees, and maintaining regression suites that cover topology exports and configuration workflows for enterprise deployments.
+        </p>
+        <div class="about-callout reveal">
+          "Breaking software before users do — methodically, repeatedly, and at scale."
+        </div>
+        <p>
+          Outside enterprise work, I pursue personal automation projects that sharpen both my engineering and creative instincts — from <strong>Playwright-based cross-platform frameworks</strong> to Python bots and scraping utilities. I believe great automation engineers think like developers first.
         </p>
         <p>
-          Beyond professional work, I build <strong>Python automation tools, scrapers, bots, and utility frameworks</strong>. I treat automation as a craft — writing reusable, maintainable, and scalable code whether it's a test suite or a standalone bot.
+          I am currently deepening expertise in <strong>advanced Playwright patterns</strong>, API testing at scale, and CI/CD pipeline integration for test automation — always moving the craft forward.
         </p>
-        <a href="#contact" class="btn btn-primary" style="margin-top:1rem">Let's Connect →</a>
       </div>
 
-      <div class="about-card">
-        <pre><code><span class="code-comment">// Gunachanthiran.config.ts</span>
+      <div class="about-right reveal">
+        <div class="info-block">
+          <div class="info-block-label">Profile</div>
+          <div class="info-pairs">
+            <div class="info-pair">
+              <span class="info-pair-key">Full Name</span>
+              <span class="info-pair-val">Gunachanthiran</span>
+            </div>
+            <div class="info-pair">
+              <span class="info-pair-key">Role</span>
+              <span class="info-pair-val">QA Engineer / SDET</span>
+            </div>
+            <div class="info-pair">
+              <span class="info-pair-key">Experience</span>
+              <span class="info-pair-val">1&ndash;3 Years</span>
+            </div>
+            <div class="info-pair">
+              <span class="info-pair-key">Location</span>
+              <span class="info-pair-val">India</span>
+            </div>
+            <div class="info-pair">
+              <span class="info-pair-key">Availability</span>
+              <span class="info-pair-val" style="color:#6A9F6E">Open to Hire</span>
+            </div>
+            <div class="info-pair">
+              <span class="info-pair-key">Work Mode</span>
+              <span class="info-pair-val">Remote / Hybrid / On-site</span>
+            </div>
+          </div>
+        </div>
 
-<span class="code-cyan">const</span> engineer = {
-  <span class="code-key">name</span>:      <span class="code-val">"Gunachanthiran"</span>,
-  <span class="code-key">role</span>:      <span class="code-val">"SDET / QA Developer"</span>,
-  <span class="code-key">location</span>: <span class="code-val">"India 🇮🇳"</span>,
-
-  <span class="code-key">specialties</span>: [
-    <span class="code-val">"Web Automation"</span>,
-    <span class="code-val">"Mobile Automation"</span>,
-    <span class="code-val">"Desktop Automation"</span>,
-    <span class="code-val">"API Automation"</span>,
-  ],
-
-  <span class="code-key">enterprise</span>: <span class="code-val">"Schneider Electric"</span>,
-
-  <span class="code-key">openToWork</span>: <span class="code-green">true</span>,
-  <span class="code-key">remote</span>:    <span class="code-green">true</span>,
-};
-
-<span class="code-cyan">export default</span> engineer;</code></pre>
+        <div class="info-block">
+          <div class="info-block-label">Automation Coverage</div>
+          <div class="info-pairs">
+            <div class="info-pair">
+              <span class="info-pair-key">Web Automation</span>
+              <span class="info-pair-val">Selenium &middot; Playwright &middot; Cypress</span>
+            </div>
+            <div class="info-pair">
+              <span class="info-pair-key">Mobile Automation</span>
+              <span class="info-pair-val">Appium</span>
+            </div>
+            <div class="info-pair">
+              <span class="info-pair-key">Desktop Automation</span>
+              <span class="info-pair-val">TestComplete &middot; WPF</span>
+            </div>
+            <div class="info-pair">
+              <span class="info-pair-key">API Automation</span>
+              <span class="info-pair-val">Postman &middot; Rest Assured</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
+
+<div class="divider"></div>
 
 <!-- ── SKILLS ── -->
 <section id="skills">
-  <div class="container">
-    <div class="section-label">// skills.json</div>
-    <h2 class="section-title">Full <span class="accent">Tech Stack</span></h2>
-    <p class="section-desc">End-to-end automation capabilities spanning web, mobile, desktop, and API layers.</p>
+  <div class="wrap">
+    <div class="sec-index">02 &mdash; Skills</div>
+    <h2 class="sec-title">Full <span class="italic">Tech Stack</span></h2>
+    <p class="sec-lead">End-to-end automation capability across every layer of a modern software stack.</p>
 
-    <div class="skills-grid">
-
-      <div class="skill-card">
-        <div class="skill-card-icon">🧪</div>
-        <div class="skill-card-title">Testing Frameworks</div>
-        <div class="skill-tags">
-          <span class="tag">Selenium</span>
-          <span class="tag">Playwright</span>
-          <span class="tag">Cypress</span>
-          <span class="tag">Appium</span>
-          <span class="tag">TestComplete</span>
-          <span class="tag">Rest Assured</span>
-          <span class="tag">Postman</span>
-        </div>
+    <div class="skills-layout">
+      <div class="skills-nav">
+        <div class="skills-nav-item active"><span class="nav-num">01</span> Languages</div>
+        <div class="skills-nav-item"><span class="nav-num">02</span> Testing Tools</div>
+        <div class="skills-nav-item"><span class="nav-num">03</span> Frameworks</div>
+        <div class="skills-nav-item"><span class="nav-num">04</span> CI/CD &amp; DevOps</div>
+        <div class="skills-nav-item"><span class="nav-num">05</span> Testing Types</div>
+        <div class="skills-nav-item"><span class="nav-num">06</span> Dev Tools</div>
       </div>
 
-      <div class="skill-card">
-        <div class="skill-card-icon">💻</div>
-        <div class="skill-card-title">Languages</div>
-        <div class="skill-tags">
-          <span class="tag">Java</span>
-          <span class="tag">Python</span>
-          <span class="tag">JavaScript</span>
-          <span class="tag">TypeScript</span>
-        </div>
-      </div>
+      <div class="skills-groups reveal">
 
-      <div class="skill-card">
-        <div class="skill-card-icon">🏗️</div>
-        <div class="skill-card-title">Test Architecture</div>
-        <div class="skill-tags">
-          <span class="tag green">TestNG</span>
-          <span class="tag green">JUnit</span>
-          <span class="tag green">Cucumber</span>
-          <span class="tag green">BDD / Gherkin</span>
-          <span class="tag green">POM Design</span>
-          <span class="tag green">Allure Reports</span>
+        <div class="skill-group">
+          <div class="skill-group-title">Languages</div>
+          <div class="skill-pills">
+            <span class="pill"><span class="pill-dot amber"></span>Java</span>
+            <span class="pill"><span class="pill-dot amber"></span>Python</span>
+            <span class="pill"><span class="pill-dot amber"></span>JavaScript</span>
+            <span class="pill"><span class="pill-dot amber"></span>TypeScript</span>
+          </div>
         </div>
-      </div>
 
-      <div class="skill-card">
-        <div class="skill-card-icon">⚙️</div>
-        <div class="skill-card-title">CI/CD & DevOps</div>
-        <div class="skill-tags">
-          <span class="tag amber">Jenkins</span>
-          <span class="tag amber">GitHub Actions</span>
-          <span class="tag amber">Docker</span>
-          <span class="tag amber">Git</span>
+        <div class="skill-group">
+          <div class="skill-group-title">Testing Tools &amp; Frameworks</div>
+          <div class="skill-pills">
+            <span class="pill"><span class="pill-dot green"></span>Selenium WebDriver</span>
+            <span class="pill"><span class="pill-dot green"></span>Playwright</span>
+            <span class="pill"><span class="pill-dot green"></span>Cypress</span>
+            <span class="pill"><span class="pill-dot green"></span>Appium</span>
+            <span class="pill"><span class="pill-dot green"></span>TestComplete</span>
+            <span class="pill"><span class="pill-dot green"></span>Postman</span>
+            <span class="pill"><span class="pill-dot green"></span>Rest Assured</span>
+          </div>
         </div>
-      </div>
 
-      <div class="skill-card">
-        <div class="skill-card-icon">🔍</div>
-        <div class="skill-card-title">Testing Types</div>
-        <div class="skill-tags">
-          <span class="tag">E2E Testing</span>
-          <span class="tag">API Testing</span>
-          <span class="tag">Regression</span>
-          <span class="tag">Functional</span>
-          <span class="tag">Integration</span>
-          <span class="tag">Data Validation</span>
+        <div class="skill-group">
+          <div class="skill-group-title">Test Architecture &amp; Design</div>
+          <div class="skill-pills">
+            <span class="pill"><span class="pill-dot red"></span>TestNG</span>
+            <span class="pill"><span class="pill-dot red"></span>JUnit</span>
+            <span class="pill"><span class="pill-dot red"></span>Cucumber / BDD</span>
+            <span class="pill"><span class="pill-dot red"></span>Gherkin</span>
+            <span class="pill"><span class="pill-dot red"></span>Page Object Model</span>
+            <span class="pill"><span class="pill-dot red"></span>Allure Reports</span>
+            <span class="pill"><span class="pill-dot red"></span>Framework Design</span>
+          </div>
         </div>
-      </div>
 
-      <div class="skill-card">
-        <div class="skill-card-icon">🐍</div>
-        <div class="skill-card-title">Dev & Automation Tools</div>
-        <div class="skill-tags">
-          <span class="tag green">Python Scripts</span>
-          <span class="tag green">Excel Automation</span>
-          <span class="tag green">Web Scraping</span>
-          <span class="tag green">Bot Development</span>
-          <span class="tag green">Jira</span>
+        <div class="skill-group">
+          <div class="skill-group-title">CI/CD &amp; DevOps</div>
+          <div class="skill-pills">
+            <span class="pill"><span class="pill-dot amber"></span>Jenkins</span>
+            <span class="pill"><span class="pill-dot amber"></span>GitHub Actions</span>
+            <span class="pill"><span class="pill-dot amber"></span>Docker</span>
+            <span class="pill"><span class="pill-dot amber"></span>Git</span>
+          </div>
         </div>
-      </div>
 
+        <div class="skill-group">
+          <div class="skill-group-title">Testing Disciplines</div>
+          <div class="skill-pills">
+            <span class="pill"><span class="pill-dot green"></span>End-to-End Testing</span>
+            <span class="pill"><span class="pill-dot green"></span>Regression Testing</span>
+            <span class="pill"><span class="pill-dot green"></span>Functional Testing</span>
+            <span class="pill"><span class="pill-dot green"></span>Integration Testing</span>
+            <span class="pill"><span class="pill-dot green"></span>API Testing</span>
+            <span class="pill"><span class="pill-dot green"></span>Data Validation</span>
+            <span class="pill"><span class="pill-dot green"></span>Root Cause Analysis</span>
+            <span class="pill"><span class="pill-dot green"></span>Debugging</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <div class="skill-group-title">Developer &amp; Automation Utilities</div>
+          <div class="skill-pills">
+            <span class="pill"><span class="pill-dot amber"></span>Excel Automation</span>
+            <span class="pill"><span class="pill-dot amber"></span>Web Scraping</span>
+            <span class="pill"><span class="pill-dot amber"></span>Bot Development</span>
+            <span class="pill"><span class="pill-dot amber"></span>Python Scripting</span>
+            <span class="pill"><span class="pill-dot amber"></span>Jira</span>
+            <span class="pill"><span class="pill-dot amber"></span>Process Automation</span>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 </section>
+
+<div class="divider"></div>
 
 <!-- ── EXPERIENCE ── -->
 <section id="experience">
-  <div class="container">
-    <div class="section-label">// experience.yml</div>
-    <h2 class="section-title">Where I've <span class="accent">Worked</span></h2>
-    <p class="section-desc" style="margin-bottom:3.5rem">Enterprise-grade automation with measurable real-world impact.</p>
+  <div class="wrap">
+    <div class="sec-index">03 &mdash; Experience</div>
+    <h2 class="sec-title">Where I've <span class="italic">Built.</span></h2>
+    <p class="sec-lead">Enterprise-grade quality engineering with real-world complexity and measurable delivery.</p>
 
-    <div class="timeline">
-      <div class="timeline-item">
-        <div class="tl-meta">
-          <div class="tl-company">Schneider Electric</div>
-          <div class="tl-role">QA Engineer / Automation</div>
-          <div class="tl-date">2022 – Present</div>
+    <div class="exp-entries">
+
+      <div class="exp-item reveal">
+        <div class="exp-left">
+          <div class="exp-company">Schneider Electric</div>
+          <div class="exp-period">2022 &mdash; Present</div>
+          <div class="exp-type">Full-time &middot; Enterprise Software</div>
         </div>
-        <p class="tl-desc">Enterprise industrial software testing — automating complex WPF desktop applications for electrical design tools used by engineers globally.</p>
-        <ul class="tl-points">
-          <li>Automated <strong>WPF desktop applications</strong> using TestComplete with custom object identification strategies for non-standard UI components</li>
-          <li>Built reusable <strong>topology export automation</strong> for industrial network configuration software, cutting manual test time significantly</li>
-          <li>Developed Python utilities for <strong>data extraction, report generation, and test data management</strong> across product releases</li>
-          <li>Performed <strong>E2E functional, regression, and integration testing</strong> for enterprise electrical design software</li>
-          <li>Collaborated with developers to triage defects, perform <strong>root cause analysis</strong>, and close issues pre-release</li>
-          <li>Designed and maintained <strong>reusable automation framework architecture</strong> for desktop testing</li>
-        </ul>
+        <div class="exp-right">
+          <div class="exp-role">QA Engineer / Automation Engineer</div>
+          <p class="exp-summary">
+            Industrial software testing for electrical design tools deployed to engineering organisations worldwide. Responsible for end-to-end automation coverage across complex WPF desktop applications — from object identification strategy to reusable framework architecture and release-cycle regression execution.
+          </p>
+          <ul class="exp-points">
+            <li><strong>Desktop Automation Framework</strong> — Designed and built a reusable TestComplete automation framework for WPF applications, implementing custom object identification strategies for non-standard UI components that standard mapping could not resolve.</li>
+            <li><strong>Topology Export Automation</strong> — Automated industrial network topology export workflows, eliminating significant manual validation overhead across multiple product releases and configurations.</li>
+            <li><strong>Python Utility Development</strong> — Developed Python scripts for test data management, structured report generation, and batch data extraction, accelerating pre-release QA cycles.</li>
+            <li><strong>Regression &amp; Integration Testing</strong> — Maintained comprehensive regression, functional, and integration test suites across multiple concurrent product versions in Agile delivery sprints.</li>
+            <li><strong>Defect Analysis &amp; Collaboration</strong> — Performed systematic root cause analysis on critical defects, partnering directly with development engineering to reproduce, triage, and close high-priority issues before milestone releases.</li>
+            <li><strong>Framework Architecture</strong> — Contributed to test framework design decisions, code review processes, and QA process documentation within the engineering team.</li>
+          </ul>
+          <div class="exp-tags">
+            <span class="exp-tag">TestComplete</span>
+            <span class="exp-tag">WPF Automation</span>
+            <span class="exp-tag">Python</span>
+            <span class="exp-tag">Java</span>
+            <span class="exp-tag">Regression Testing</span>
+            <span class="exp-tag">Jenkins</span>
+            <span class="exp-tag">Jira</span>
+            <span class="exp-tag">Git</span>
+          </div>
+        </div>
       </div>
+
     </div>
   </div>
 </section>
+
+<div class="divider"></div>
 
 <!-- ── PROJECTS ── -->
 <section id="projects">
-  <div class="container">
-    <div class="section-label">// projects[]</div>
-    <h2 class="section-title">Featured <span class="accent">Projects</span></h2>
-    <p class="section-desc">Real-world automation engineering — frameworks, tools, and systems built from scratch.</p>
+  <div class="wrap">
+    <div class="sec-index">04 &mdash; Projects</div>
+    <h2 class="sec-title">Selected <span class="italic">Work.</span></h2>
+    <p class="sec-lead">Automation frameworks, utility tools, and systems built independently from the ground up.</p>
 
-    <div class="projects-grid">
+    <div class="projects-list">
 
-      <div class="project-card">
-        <div class="project-top">
-          <div class="project-icon">🚗</div>
-          <div class="project-links">
-            <a href="#" class="project-link" title="GitHub">⎇</a>
-          </div>
+      <div class="project-row reveal">
+        <div>
+          <div class="project-num">01</div>
+          <div class="project-name">Spinny Automation Framework</div>
+          <div class="project-domain">Web &middot; Mobile &middot; Reporting</div>
         </div>
-        <div class="project-name">Spinny Automation Framework</div>
-        <div class="project-desc">Full-stack Web + Mobile test automation suite for the Spinny platform. POM architecture with parallel execution, cross-browser support, and rich Allure reporting dashboard.</div>
-        <div class="project-stack">
-          <span class="tag">Playwright</span>
-          <span class="tag">TypeScript</span>
-          <span class="tag green">Allure</span>
-          <span class="tag">POM</span>
+        <div class="project-desc-col">
+          Full-stack test automation framework for the Spinny platform, covering both web and mobile surfaces. Built with <strong>Playwright and TypeScript</strong> using Page Object Model architecture. Supports parallel execution, cross-browser runs, and generates rich Allure HTML reporting dashboards. Designed as a scalable, team-ready framework from the outset.
+        </div>
+        <div class="project-meta">
+          <a href="#" class="project-link-btn">
+            View Repo
+            <svg viewBox="0 0 10 10" stroke-width="1.5" stroke="currentColor"><line x1="1" y1="9" x2="9" y2="1"/><polyline points="4,1 9,1 9,6"/></svg>
+          </a>
+          <div class="project-stack-row">
+            <span class="proj-tag">Playwright</span>
+            <span class="proj-tag">TypeScript</span>
+            <span class="proj-tag">Allure</span>
+            <span class="proj-tag">POM</span>
+          </div>
         </div>
       </div>
 
-      <div class="project-card">
-        <div class="project-top">
-          <div class="project-icon">🤖</div>
-          <div class="project-links">
-            <a href="#" class="project-link" title="GitHub">⎇</a>
-          </div>
+      <div class="project-row reveal">
+        <div>
+          <div class="project-num">02</div>
+          <div class="project-name">LinkedIn Lead Automation</div>
+          <div class="project-domain">Scraping &middot; Process Automation</div>
         </div>
-        <div class="project-name">LinkedIn Lead Automation</div>
-        <div class="project-desc">Python + Selenium tool that scrapes, qualifies, and processes LinkedIn leads automatically. Handles session management, pagination, and structured data export.</div>
-        <div class="project-stack">
-          <span class="tag">Python</span>
-          <span class="tag">Selenium</span>
-          <span class="tag amber">Chrome</span>
+        <div class="project-desc-col">
+          Python and Selenium tool that automates lead discovery and qualification on LinkedIn. Handles authenticated session management, paginated search traversal, structured profile data extraction, and configurable filtering logic. Outputs organised data ready for downstream CRM or outreach workflows.
+        </div>
+        <div class="project-meta">
+          <a href="#" class="project-link-btn">
+            View Repo
+            <svg viewBox="0 0 10 10" stroke-width="1.5" stroke="currentColor"><line x1="1" y1="9" x2="9" y2="1"/><polyline points="4,1 9,1 9,6"/></svg>
+          </a>
+          <div class="project-stack-row">
+            <span class="proj-tag">Python</span>
+            <span class="proj-tag">Selenium</span>
+            <span class="proj-tag">Chrome</span>
+          </div>
         </div>
       </div>
 
-      <div class="project-card">
-        <div class="project-top">
-          <div class="project-icon">📱</div>
-          <div class="project-links">
-            <a href="#" class="project-link" title="GitHub">⎇</a>
-          </div>
+      <div class="project-row reveal">
+        <div>
+          <div class="project-num">03</div>
+          <div class="project-name">Telegram Course Scraper</div>
+          <div class="project-domain">Async Scraping &middot; Excel Automation</div>
         </div>
-        <div class="project-name">Telegram Course Scraper</div>
-        <div class="project-desc">Asynchronous Telegram channel scraper using Telethon. Extracts structured course data, metadata, and media links into organized Excel reports automatically.</div>
-        <div class="project-stack">
-          <span class="tag">Python</span>
-          <span class="tag">Telethon</span>
-          <span class="tag green">OpenPyXL</span>
+        <div class="project-desc-col">
+          Asynchronous Telegram channel data extractor built with <strong>Telethon</strong>. Navigates channel histories, extracts structured course metadata, media links, and timestamps, then outputs clean multi-sheet Excel reports via OpenPyXL. Handles pagination, rate limiting, and session persistence reliably.
+        </div>
+        <div class="project-meta">
+          <a href="#" class="project-link-btn">
+            View Repo
+            <svg viewBox="0 0 10 10" stroke-width="1.5" stroke="currentColor"><line x1="1" y1="9" x2="9" y2="1"/><polyline points="4,1 9,1 9,6"/></svg>
+          </a>
+          <div class="project-stack-row">
+            <span class="proj-tag">Python</span>
+            <span class="proj-tag">Telethon</span>
+            <span class="proj-tag">OpenPyXL</span>
+          </div>
         </div>
       </div>
 
-      <div class="project-card">
-        <div class="project-top">
-          <div class="project-icon">🛒</div>
-          <div class="project-links">
-            <a href="#" class="project-link" title="GitHub">⎇</a>
-          </div>
+      <div class="project-row reveal">
+        <div>
+          <div class="project-num">04</div>
+          <div class="project-name">Amazon Price Tracker</div>
+          <div class="project-domain">Monitoring &middot; Alerting</div>
         </div>
-        <div class="project-name">Amazon Price Tracker</div>
-        <div class="project-desc">Real-time price monitoring bot for Amazon products. Tracks price drops, logs history, and sends email alerts when targets are hit. Configurable and lightweight.</div>
-        <div class="project-stack">
-          <span class="tag">Python</span>
-          <span class="tag amber">BeautifulSoup</span>
-          <span class="tag">SMTP</span>
+        <div class="project-desc-col">
+          Real-time Amazon product price monitoring system. Tracks multiple product listings, logs price history with timestamps, evaluates configurable drop thresholds, and dispatches automated email alerts when targets are met. Lightweight, extensible, and designed to run unattended on a schedule.
+        </div>
+        <div class="project-meta">
+          <a href="#" class="project-link-btn">
+            View Repo
+            <svg viewBox="0 0 10 10" stroke-width="1.5" stroke="currentColor"><line x1="1" y1="9" x2="9" y2="1"/><polyline points="4,1 9,1 9,6"/></svg>
+          </a>
+          <div class="project-stack-row">
+            <span class="proj-tag">Python</span>
+            <span class="proj-tag">BeautifulSoup</span>
+            <span class="proj-tag">SMTP</span>
+          </div>
         </div>
       </div>
 
-      <div class="project-card">
-        <div class="project-top">
-          <div class="project-icon">🖥️</div>
-          <div class="project-links">
-            <a href="#" class="project-link" title="GitHub">⎇</a>
-          </div>
+      <div class="project-row reveal">
+        <div>
+          <div class="project-num">05</div>
+          <div class="project-name">Desktop Automation Framework</div>
+          <div class="project-domain">Enterprise &middot; WPF &middot; Industrial</div>
         </div>
-        <div class="project-name">Desktop Automation Framework</div>
-        <div class="project-desc">Enterprise-grade desktop UI automation for WPF applications. Custom object tree mapping, topology export automation, and reusable action libraries for industrial software.</div>
-        <div class="project-stack">
-          <span class="tag">TestComplete</span>
-          <span class="tag amber">WPF</span>
-          <span class="tag">Python</span>
+        <div class="project-desc-col">
+          Enterprise-grade automation framework for complex WPF desktop applications in the industrial software domain. Features custom object tree mapping, topology export automation routines, reusable action libraries, and structured test reporting. Built for stability across multi-version product cycles.
+        </div>
+        <div class="project-meta">
+          <a href="#" class="project-link-btn">
+            View Repo
+            <svg viewBox="0 0 10 10" stroke-width="1.5" stroke="currentColor"><line x1="1" y1="9" x2="9" y2="1"/><polyline points="4,1 9,1 9,6"/></svg>
+          </a>
+          <div class="project-stack-row">
+            <span class="proj-tag">TestComplete</span>
+            <span class="proj-tag">WPF</span>
+            <span class="proj-tag">Python</span>
+          </div>
         </div>
       </div>
 
@@ -932,88 +1245,225 @@
   </div>
 </section>
 
+<div class="divider"></div>
+
+<!-- ── CURRENTLY LEARNING ── -->
+<section id="learning">
+  <div class="wrap">
+    <div class="sec-index">05 &mdash; Currently Learning</div>
+    <h2 class="sec-title">Always <span class="italic">Advancing.</span></h2>
+    <p class="sec-lead">The automation landscape evolves constantly — I stay ahead of it with focused, deliberate upskilling.</p>
+
+    <div class="learning-grid">
+
+      <div class="learn-card reveal">
+        <div class="learn-card-num">01 &mdash; In Progress</div>
+        <div class="learn-card-title">Advanced Playwright Framework Design</div>
+        <div class="learn-card-body">Deep-diving into Playwright's advanced features — fixtures, custom reporters, test sharding, API mocking, and component testing. Building production-grade framework patterns beyond the basics.</div>
+        <div class="learn-progress"><div class="learn-progress-fill" style="width:75%"></div></div>
+      </div>
+
+      <div class="learn-card reveal">
+        <div class="learn-card-num">02 &mdash; In Progress</div>
+        <div class="learn-card-title">API Testing at Scale</div>
+        <div class="learn-card-body">Advancing Rest Assured and Postman/Newman expertise for large-scale API contract testing, collection-driven test runs, and data-driven API validation pipelines with structured reporting.</div>
+        <div class="learn-progress"><div class="learn-progress-fill" style="width:60%"></div></div>
+      </div>
+
+      <div class="learn-card reveal">
+        <div class="learn-card-num">03 &mdash; In Progress</div>
+        <div class="learn-card-title">CI/CD for Automation</div>
+        <div class="learn-card-body">Integrating test automation into Jenkins and GitHub Actions pipelines — scheduled runs, parallelism, Docker containerised execution, and automated failure notifications with trace artefacts.</div>
+        <div class="learn-progress"><div class="learn-progress-fill" style="width:50%"></div></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── CERTIFICATIONS ── -->
+<section id="certifications">
+  <div class="wrap">
+    <div class="sec-index">06 &mdash; Certifications</div>
+    <h2 class="sec-title">Credentials &amp; <span class="italic">Recognition.</span></h2>
+    <p class="sec-lead">Formal validation of skills across testing methodology, tooling, and engineering fundamentals.</p>
+
+    <div class="certs-grid">
+
+      <div class="cert-card reveal">
+        <div class="cert-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 15l-2 5-5-5 5-5"/><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <div class="cert-name">ISTQB Foundation Level</div>
+        <div class="cert-issuer">ISTQB &mdash; International</div>
+        <div class="cert-note">Core software testing theory and methodology</div>
+      </div>
+
+      <div class="cert-card reveal">
+        <div class="cert-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 12h8M12 8v8"/></svg>
+        </div>
+        <div class="cert-name">Selenium WebDriver</div>
+        <div class="cert-issuer">Udemy / LinkedIn Learning</div>
+        <div class="cert-note">Advanced browser automation with Java</div>
+      </div>
+
+      <div class="cert-card reveal">
+        <div class="cert-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 2H3v16h5v4l4-4h4l5-5V2z"/><path d="M7 8h10M7 12h6"/></svg>
+        </div>
+        <div class="cert-name">Postman API Certification</div>
+        <div class="cert-issuer">Postman Academy</div>
+        <div class="cert-note">API design, testing, and automation</div>
+      </div>
+
+    </div>
+
+    <p style="margin-top:2rem; font-size:0.8rem; color:var(--cream-faint); font-family:var(--mono); letter-spacing:0.06em;">
+      * Update with your actual certifications before publishing.
+    </p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
 <!-- ── CONTACT ── -->
 <section id="contact">
-  <div class="container">
-    <div class="section-label">// contact.txt</div>
-    <h2 class="section-title">Let's <span class="accent">Connect</span></h2>
+  <div class="wrap">
+    <div class="sec-index">07 &mdash; Contact</div>
+    <h2 class="sec-title">Let's <span class="italic">Connect.</span></h2>
 
-    <div class="contact-grid">
-      <div>
-        <p style="color:var(--text-muted); max-width:420px; margin-bottom:0.5rem;">
-          Open to <strong style="color:var(--text)">QA Engineer, SDET, Automation Engineer</strong> and <strong style="color:var(--text)">QA Developer</strong> roles — remote, hybrid, or on-site.
+    <div class="contact-layout">
+
+      <div class="contact-left reveal">
+        <p class="contact-tagline">
+          Open to the right role —<br/>
+          <em>wherever quality matters.</em>
         </p>
+        <p class="contact-body">
+          I am actively looking for <strong>QA Engineer, SDET, and Automation Engineer</strong> roles where precision, framework thinking, and developer-level engineering ability are valued. Open to full-time, contract, and remote positions.
+        </p>
+
         <div class="contact-links">
-          <a href="https://linkedin.com/in/gunachanthiran" class="contact-item" target="_blank">
-            <div class="contact-item-icon ci-blue">in</div>
-            <div class="contact-item-text">
-              <span class="ci-label">LINKEDIN</span>
-              <span class="ci-value">linkedin.com/in/gunachanthiran</span>
+          <a href="https://linkedin.com/in/gunachanthiran" class="c-link" target="_blank">
+            <div class="c-link-left">
+              <span class="c-label">LinkedIn</span>
+              <span class="c-value">linkedin.com/in/gunachanthiran</span>
             </div>
+            <span class="c-arrow">&#8599;</span>
           </a>
-          <a href="https://github.com/gunachanthiran" class="contact-item" target="_blank">
-            <div class="contact-item-icon ci-cyan">⎇</div>
-            <div class="contact-item-text">
-              <span class="ci-label">GITHUB</span>
-              <span class="ci-value">github.com/gunachanthiran</span>
+          <a href="https://github.com/gunachanthiran" class="c-link" target="_blank">
+            <div class="c-link-left">
+              <span class="c-label">GitHub</span>
+              <span class="c-value">github.com/gunachanthiran</span>
             </div>
+            <span class="c-arrow">&#8599;</span>
           </a>
-          <a href="mailto:gunachanthiran@email.com" class="contact-item">
-            <div class="contact-item-icon ci-red">✉</div>
-            <div class="contact-item-text">
-              <span class="ci-label">EMAIL</span>
-              <span class="ci-value">gunachanthiran@email.com</span>
+          <a href="mailto:gunachanthiran@email.com" class="c-link">
+            <div class="c-link-left">
+              <span class="c-label">Email</span>
+              <span class="c-value">gunachanthiran@email.com</span>
             </div>
+            <span class="c-arrow">&#8599;</span>
           </a>
         </div>
       </div>
 
-      <div class="open-to">
-        <h3>✅ Open to Roles</h3>
-        <div style="margin-bottom:1.25rem">
-          <span class="open-to-tag">QA Engineer</span>
-          <span class="open-to-tag">SDET</span>
-          <span class="open-to-tag">Automation Engineer</span>
-          <span class="open-to-tag">QA Developer</span>
-          <span class="open-to-tag">Test Architect</span>
-          <span class="open-to-tag">Software Test Developer</span>
-          <span class="open-to-tag">QA Analyst</span>
+      <div class="contact-right reveal">
+        <div class="availability-card">
+          <div class="avail-status"><div class="avail-dot"></div> Open to Work</div>
+          <div class="avail-title">Roles I am targeting</div>
+          <div class="avail-roles">
+            <span class="avail-role">QA Engineer</span>
+            <span class="avail-role">SDET</span>
+            <span class="avail-role">Automation Engineer</span>
+            <span class="avail-role">QA Developer</span>
+            <span class="avail-role">Software Test Developer</span>
+            <span class="avail-role">Test Architect</span>
+            <span class="avail-role">QA Analyst</span>
+          </div>
         </div>
-        <p style="font-size:0.85rem; color:var(--text-muted);">
-          Available for full-time, contract, and freelance opportunities. Ready to onboard quickly and contribute to quality from day one.
-        </p>
+
+        <div class="prefer-card">
+          <div class="prefer-title">Preferences</div>
+          <div class="prefer-items">
+            <div class="prefer-item"><span class="prefer-check">&#10003;</span> Remote, Hybrid, or On-site</div>
+            <div class="prefer-item"><span class="prefer-check">&#10003;</span> Full-time or Contract</div>
+            <div class="prefer-item"><span class="prefer-check">&#10003;</span> Product, SaaS, or Enterprise environments</div>
+            <div class="prefer-item"><span class="prefer-check">&#10003;</span> Teams that treat QA as engineering</div>
+            <div class="prefer-item"><span class="prefer-check">&#10003;</span> Agile / Scrum delivery environments</div>
+          </div>
+        </div>
       </div>
+
     </div>
   </div>
 </section>
 
 <!-- ── FOOTER ── -->
 <footer>
-  <p>Built by <span>Gunachanthiran</span> · QA Engineer & Automation Architect · "Breaking software so users don't have to 🐛"</p>
+  <div class="footer-brand">Guna<em>chanthiran</em></div>
+  <div class="footer-copy">
+    &copy; 2025 &mdash; QA Engineer &amp; Automation Architect
+  </div>
+  <div class="footer-links">
+    <a href="https://linkedin.com/in/gunachanthiran" target="_blank">LinkedIn</a>
+    <a href="https://github.com/gunachanthiran" target="_blank">GitHub</a>
+    <a href="mailto:gunachanthiran@email.com">Email</a>
+  </div>
 </footer>
 
 <script>
-  // Navbar scroll effect
+  // ── CURSOR
+  const cur = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function animateCursor() {
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    if (cur)  { cur.style.left  = mx + 'px'; cur.style.top  = my + 'px'; }
+    if (ring) { ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; }
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+
+  // ── NAV SCROLL
+  const nav = document.getElementById('navbar');
   window.addEventListener('scroll', () => {
-    const nav = document.getElementById('navbar');
-    nav.style.padding = window.scrollY > 50 ? '0.75rem 5%' : '1.1rem 5%';
+    nav.classList.toggle('scrolled', window.scrollY > 60);
   });
 
-  // Intersection observer fade-in
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.opacity = '1';
-        entry.target.style.transform = 'translateY(0)';
+  // ── HAMBURGER
+  document.getElementById('hamburger').addEventListener('click', () => {
+    document.getElementById('navlinks').classList.toggle('open');
+  });
+
+  // ── SCROLL REVEAL
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // ── PROGRESS BARS (trigger on scroll)
+  const progressObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const fill = e.target.querySelector('.learn-progress-fill');
+        if (fill) { const w = fill.style.width; fill.style.width = '0'; setTimeout(() => fill.style.width = w, 100); }
       }
     });
-  }, { threshold: 0.1 });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.learn-card').forEach(el => progressObserver.observe(el));
 
-  document.querySelectorAll('.skill-card, .project-card, .timeline-item, .contact-item').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(24px)';
-    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-    observer.observe(el);
+  // ── SKILLS NAV HIGHLIGHT
+  const skillItems = document.querySelectorAll('.skills-nav-item');
+  skillItems.forEach((item, i) => {
+    item.addEventListener('click', () => {
+      skillItems.forEach(s => s.classList.remove('active'));
+      item.classList.add('active');
+    });
   });
 </script>
 
