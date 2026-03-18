@@ -540,7 +540,7 @@ function Hero(){
           <div className="hsub">
             {['QA Engineer','SDET','Automation Architect','QA Developer'].map(r=><span key={r} className="hsi">{r}</span>)}
           </div>
-          <p className="hdesc">I build the safety nets that catch defects before your users ever encounter them. Enterprise experience at <strong>Schneider Electric</strong> &mdash; automating <strong>web, mobile, desktop and API</strong> surfaces with precision and care.</p>
+          <p className="hdesc">I build the safety nets that catch defects before your users ever encounter them. Enterprise experience at <strong>Moolya</strong> &mdash; automating <strong>web, mobile, desktop and API</strong> surfaces with precision and care.</p>
           <div className="hbtns">
             <Mag className="bp" onClick={()=>goTo('projects')}><div className="fill"/><span>View My Work</span></Mag>
             <Mag className="bg" onClick={()=>goTo('contact')}><div className="fill"/><span>Get in Touch</span></Mag>
@@ -571,7 +571,7 @@ function About(){
       <div className="ag">
         <div ref={r1} className={`ab rv ${v1?'in':''}`}>
           <p>I am a <strong>QA Engineer and Automation Developer</strong> operating at the crossover between quality assurance and software engineering. My work extends to designing <span className="ac">framework architecture</span>, building reusable automation infrastructure, and Python tooling that eliminates manual overhead.</p>
-          <p>At <strong>Schneider Electric</strong>, I work on industrial-grade desktop software used by electrical engineers worldwide — automating <strong>WPF applications</strong> with non-standard controls, mapping complex object trees, and maintaining regression suites for topology exports.</p>
+          <p>At <strong>Moolya</strong>, I work on industrial-grade desktop software used by electrical engineers worldwide — automating <strong>WPF applications</strong> with non-standard controls, mapping complex object trees, and maintaining regression suites for topology exports.</p>
           <div ref={bqRef} className={`bq ${bqA?'a':''}`}>"Breaking software before users do &mdash; methodically, repeatedly, and at scale."</div>
           <p>Outside enterprise work, I build personal automation tools &mdash; <strong>Playwright cross-platform frameworks</strong>, Python bots, scrapers, and utilities. Great automation engineers think like developers first.</p>
         </div>
@@ -589,7 +589,7 @@ function About(){
               <br/>
               <div><span className="ty">const</span> <span className="tk">me</span> = {'{'}</div>
               <div>&nbsp; <span className="tk">role</span>: <span className="ts">"SDET / QA Developer"</span>,</div>
-              <div>&nbsp; <span className="tk">company</span>: <span className="ts">"Schneider Electric"</span>,</div>
+              <div>&nbsp; <span className="tk">company</span>: <span className="ts">"Moolya"</span>,</div>
               <div>&nbsp; <span className="tk">domains</span>: [<span className="ts">"Web"</span>, <span className="ts">"Mobile"</span>, <span className="ts">"Desktop"</span>, <span className="ts">"API"</span>],</div>
               <div>&nbsp; <span className="tk">stack</span>: [<span className="ts">"Java"</span>, <span className="ts">"Python"</span>, <span className="ts">"TypeScript"</span>],</div>
               <div>&nbsp; <span className="tk">openToWork</span>: <span className="tn">true</span>,</div>
@@ -750,7 +750,7 @@ function StatsSection(){
     {n:4,suffix:'',label:'Automation Domains',desc:'Web · Mobile · Desktop · API'},
     {n:10,suffix:'+',label:'Tools & Frameworks',desc:'Across test stack'},
     {n:5,suffix:'+',label:'Real Projects',desc:'Built end-to-end'},
-    {n:3,suffix:'yrs',label:'Enterprise Experience',desc:'Schneider Electric'},
+    {n:3,suffix:'yrs',label:'Enterprise Experience',desc:'Moolya'},
   ];
   const[vals,setVals]=useState(stats.map(()=>0));const done=useRef(false);
   useEffect(()=>{
