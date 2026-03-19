@@ -181,11 +181,27 @@ section{padding:112px 0}
 .hex-item:hover .hex-label{color:rgba(255,255,255,.8)}
 
 /* ARC ROW */
-.arc-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;margin-top:3.5rem}
-.arc-card{background:var(--p2);border:1px solid var(--bd);border-radius:var(--r);padding:1.5rem 1rem;text-align:center;transition:box-shadow .3s var(--e),transform .3s var(--b),border-color .25s}
-.arc-card:hover{box-shadow:var(--s2);transform:translateY(-4px);border-color:var(--bh)}
-.arc-label{font-family:var(--sm);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--i3)}
-.arc-name{font-size:.82rem;font-weight:600;color:var(--ink);margin-top:.25rem}
+.arc-row{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;margin-top:3.5rem}
+.arc-card{
+  background:var(--p2);border:1px solid var(--bd);border-radius:12px;
+  padding:1.5rem 1rem 1.25rem;text-align:center;position:relative;overflow:hidden;
+  transition:box-shadow .35s var(--ease),transform .35s var(--back),border-color .25s;
+  cursor:default;
+}
+.arc-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:var(--arc-color,#18275A);
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .45s var(--ease);
+}
+.arc-card:hover{box-shadow:var(--s2);transform:translateY(-5px);border-color:var(--bh)}
+.arc-card:hover::before{transform:scaleX(1)}
+.arc-icon{font-size:1.4rem;margin-bottom:.6rem;display:block}
+.arc-label{font-family:var(--sm);font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--i4);margin-top:.5rem}
+.arc-name{font-size:.82rem;font-weight:600;color:var(--ink);margin-top:.2rem;line-height:1.2}
+.arc-tools{font-family:var(--sm);font-size:.55rem;letter-spacing:.04em;color:var(--i4);margin-top:.4rem;line-height:1.5;opacity:0;transform:translateY(4px);transition:opacity .3s,transform .3s var(--ease)}
+.arc-card:hover .arc-tools{opacity:1;transform:translateY(0)}
+.arc-pct-label{font-family:var(--sm);font-size:.65rem;letter-spacing:.06em;font-weight:600;margin-top:.3rem}
 
 /* EXPERIENCE */
 #experience{background:var(--p2)}
@@ -474,15 +490,31 @@ function Counter({to,suffix='',text}){
 }
 
 /* ── ARC SVG ── */
-function Arc({pct,color,size=80}){
-  const[ref,vis]=useReveal(.4);const[p,setP]=useState(0);
+function Arc({pct,color,size=72}){
+  const[ref,vis]=useReveal(.4);
+  const[p,setP]=useState(0);
   useEffect(()=>{if(vis)setTimeout(()=>setP(pct),200);},[vis]);
-  const r=30;const circ=2*Math.PI*r;const dash=circ*p/100;
+  const r=28;const circ=2*Math.PI*r;const dash=circ*p/100;
+  const trackColor='rgba(14,14,19,0.07)';
   return(
-    <svg ref={ref} width={size} height={size} viewBox="0 0 80 80">
-      <circle cx="40" cy="40" r={r} fill="none" stroke="rgba(14,14,19,0.07)" strokeWidth="4"/>
-      <circle cx="40" cy="40" r={r} fill="none" stroke={color} strokeWidth="4" strokeDasharray={`${dash} ${circ}`} strokeDashoffset={circ/4} strokeLinecap="round" style={{transition:'stroke-dasharray 1.4s cubic-bezier(.22,1,.36,1)'}}/>
-      <text x="40" y="44" textAnchor="middle" fontFamily="JetBrains Mono,monospace" fontSize="13" fontWeight="500" fill={color}>{p}%</text>
+    <svg ref={ref} width={size} height={size} viewBox="0 0 72 72" style={{display:'block',margin:'0 auto'}}>
+      {/* Background track */}
+      <circle cx="36" cy="36" r={r} fill="none" stroke={trackColor} strokeWidth="5"/>
+      {/* Glow ring behind */}
+      <circle cx="36" cy="36" r={r} fill="none" stroke={color} strokeWidth="9"
+        strokeDasharray={`${dash} ${circ}`} strokeDashoffset={circ/4}
+        strokeLinecap="round" opacity="0.15"
+        style={{transition:'stroke-dasharray 1.5s cubic-bezier(.22,1,.36,1)'}}/>
+      {/* Main arc */}
+      <circle cx="36" cy="36" r={r} fill="none" stroke={color} strokeWidth="5"
+        strokeDasharray={`${dash} ${circ}`} strokeDashoffset={circ/4}
+        strokeLinecap="round"
+        style={{transition:'stroke-dasharray 1.5s cubic-bezier(.22,1,.36,1)'}}/>
+      {/* Center percentage */}
+      <text x="36" y="39" textAnchor="middle"
+        fontFamily="JetBrains Mono,monospace" fontSize="12" fontWeight="600" fill={color}>
+        {p}%
+      </text>
     </svg>
   );
 }
@@ -614,10 +646,11 @@ const SGROUPS=[
   {t:'Dev & Utility Tools',c:'mr',items:['Excel Automation','Web Scraping','Bot Development','Python Scripting','Jira']},
 ];
 const ARC_DATA=[
-  {name:'Web Automation',pct:90,color:'#18275A'},
-  {name:'API Testing',pct:70,color:'#2A3D8F'},
-  {name:'Desktop Automation',pct:90,color:'#BC4B2A'},
-  {name:'CI/CD',pct:68,color:'#277842'},
+  {name:'Web Automation',   pct:90, color:'#18275A', icon:'🌐', tools:'Playwright · Selenium · Cypress'},
+  {name:'API Testing',      pct:70, color:'#2A3D8F', icon:'⚡', tools:'Postman · Rest Assured'},
+  {name:'Desktop Auto.',    pct:90, color:'#BC4B2A', icon:'🖥', tools:'TestComplete · WPF'},
+  {name:'Mobile Auto.',     pct:72, color:'#277842', icon:'📱', tools:'Appium · Android · iOS'},
+  {name:'CI/CD',            pct:68, color:'#6474A0', icon:'⚙', tools:'Jenkins · GitHub Actions'},
 ];
 const HEX_TOOLS=[
   {icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',label:'Java'},
@@ -644,10 +677,13 @@ function Skills(){
       {/* Arc Proficiency */}
       <div className="arc-row">
         {ARC_DATA.map(d=>(
-          <div key={d.name} className="arc-card">
+          <div key={d.name} className="arc-card" style={{'--arc-color':d.color}}>
+            <span className="arc-icon">{d.icon}</span>
             <Arc pct={d.pct} color={d.color}/>
+            <div className="arc-pct-label" style={{color:d.color}}>{d.pct}%</div>
             <div className="arc-label">Proficiency</div>
             <div className="arc-name">{d.name}</div>
+            <div className="arc-tools">{d.tools}</div>
           </div>
         ))}
       </div>
