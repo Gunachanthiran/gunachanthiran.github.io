@@ -176,7 +176,6 @@ section{padding:112px 0}
 .hex-row{display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;margin-top:3.5rem;padding:1rem 0}
 .hex-item{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100px;height:115px;background:var(--p2);border:1px solid var(--bd);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);transition:background .3s,transform .3s var(--b),box-shadow .3s;cursor:default;text-align:center;padding:1rem .5rem}
 .hex-item:hover{background:var(--nv);transform:scale(1.1) translateY(-4px);box-shadow:0 12px 30px rgba(24,39,90,.22)}
-.hex-icon{font-size:1.5rem;margin-bottom:.3rem;transition:transform .3s var(--b)}
 .hex-item:hover .hex-icon{transform:scale(1.15)}
 .hex-label{font-family:var(--sm);font-size:.55rem;letter-spacing:.08em;text-transform:uppercase;color:var(--i3);transition:color .3s;line-height:1.2}
 .hex-item:hover .hex-label{color:rgba(255,255,255,.8)}
@@ -621,10 +620,18 @@ const ARC_DATA=[
   {name:'CI/CD',pct:68,color:'#277842'},
 ];
 const HEX_TOOLS=[
-  {icon:'☕',label:'Java'},{icon:'🐍',label:'Python'},{icon:'🎭',label:'Playwright'},
-  {icon:'⚗️',label:'Selenium'},{icon:'🌲',label:'Cypress'},{icon:'📱',label:'Appium'},
-  {icon:'🔬',label:'TestComplete'},{icon:'📮',label:'Postman'},{icon:'🔁',label:'Jenkins'},
-  {icon:'🐳',label:'Docker'},{icon:'🎯',label:'TestNG'},{icon:'🥒',label:'Cucumber'},
+  {icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',label:'Java'},
+  {icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',label:'Python'},
+  {icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/playwright/playwright-original.svg',label:'Playwright'},
+  {icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/selenium/selenium-original.svg',label:'Selenium'},
+  {icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cypressio/cypressio-original.svg',label:'Cypress'},
+  {icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/appium/appium-original.svg',label:'Appium'},
+  {icon:'https://www.svgrepo.com/show/354507/testcafe.svg',label:'TestComplete'},
+  {icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postman/postman-original.svg',label:'Postman'},
+  {icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jenkins/jenkins-original.svg',label:'Jenkins'},
+  {icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg',label:'Docker'},
+  {icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',label:'TestNG'},
+  {icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cucumber/cucumber-plain.svg',label:'Cucumber'},
 ];
 function Skills(){
   const[ref,vis]=useReveal();
@@ -648,7 +655,7 @@ function Skills(){
       <div className="hex-row">
         {HEX_TOOLS.map(t=>(
           <div key={t.label} className="hex-item">
-            <div className="hex-icon">{t.icon}</div>
+            <img src={t.icon} alt={t.label} style={{width:'36px',height:'36px',objectFit:'contain',marginBottom:'.3rem'}} onError={e=>{e.target.style.display='none'}}/>
             <div className="hex-label">{t.label}</div>
           </div>
         ))}
