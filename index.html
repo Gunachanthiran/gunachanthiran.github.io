@@ -351,6 +351,7 @@ const { useState, useEffect, useRef, useCallback, useMemo } = React;
 const EMAIL   = 'gunachanthiran2486'+'@'+'gmail.com';
 const LINKEDIN = 'https://www.linkedin.com/in/gunachanthiran-k-a89747246/';
 const GITHUB   = 'https://github.com/Gunachanthiran';
+const RESUME = 'https://github.com/Gunachanthiran/Gunachanthiran/raw/main/Gunachanthiran_SDET_Resume.pdf';
 const SECTIONS = ['about','skills','experience','projects','learning','contact'];
 
 function goTo(id){
@@ -575,6 +576,7 @@ function Hero(){
           <div className="hbtns">
             <Mag className="bp" onClick={()=>goTo('projects')}><div className="fill"/><span>View My Work</span></Mag>
             <Mag className="bg" onClick={()=>goTo('contact')}><div className="fill"/><span>Get in Touch</span></Mag>
+            <Mag className="bg" href={RESUME} target="_blank" rel="noopener" download="Gunachanthiran_SDET_Resume.pdf"><div className="fill"/><span>&#8595; Resume</span></Mag>
             <Mag className="bg" href={GITHUB} target="_blank" rel="noopener"><div className="fill"/><span>GitHub</span><span className="ba">&#8599;</span></Mag>
           </div>
           <div className="hstats">
@@ -901,6 +903,28 @@ function Contact(){
           ))}</div>
         </div>
         <div ref={r2} className={`crt rv d1 ${v2?'in':''}`}>
+          <a href={RESUME} target="_blank" rel="noopener" download="Gunachanthiran_SDET_Resume.pdf"
+            style={{textDecoration:'none',display:'block',background:'var(--p)',border:'1px solid var(--bd)',
+            borderRadius:'var(--r)',padding:'1.75rem',cursor:'pointer',transition:'box-shadow .3s,transform .3s var(--b)'}}
+            onMouseEnter={e=>{e.currentTarget.style.boxShadow='var(--s2)';e.currentTarget.style.transform='translateY(-2px)'}}
+            onMouseLeave={e=>{e.currentTarget.style.boxShadow='';e.currentTarget.style.transform=''}}>
+            <div style={{display:'flex',alignItems:'center',gap:'12px',marginBottom:'.85rem'}}>
+              <div style={{width:'40px',height:'40px',background:'var(--np)',border:'1px solid rgba(24,39,90,.12)',
+                borderRadius:'10px',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1.1rem'}}>
+                &#128196;
+              </div>
+              <div>
+                <div style={{fontFamily:'var(--sm)',fontSize:'.6rem',letterSpacing:'.15em',textTransform:'uppercase',
+                  color:'var(--nm)',marginBottom:'2px'}}>Download PDF</div>
+                <div style={{fontFamily:'var(--sr)',fontSize:'1.05rem',fontWeight:500,color:'var(--ink)'}}>My Resume</div>
+              </div>
+              <span style={{marginLeft:'auto',fontFamily:'var(--sm)',fontSize:'.8rem',color:'var(--nm)',opacity:.5}}>&#8595;</span>
+            </div>
+            <div style={{fontSize:'.78rem',fontWeight:300,color:'var(--i3)',lineHeight:1.75}}>
+              Gunachanthiran K &mdash; SDET &middot; QA Engineer<br/>
+              <span style={{fontFamily:'var(--sm)',fontSize:'.62rem',color:'var(--nm)'}}>Updated March 2026</span>
+            </div>
+          </a>
           <div className="scard">
             <div className="stop"><div className="sdot"/>Open to Work</div>
             <div className="st2">Roles I am targeting</div>
